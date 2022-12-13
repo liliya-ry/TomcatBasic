@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE mapper PUBLIC '-//mybatis.org//DTD Mapper 3.0//EN'
+        'http://mybatis.org/dtd/mybatis-3-mapper.dtd'>
+
+<mapper namespace='mappers.CommentMapper'>
+
+    <resultMap type='Comment' id='CommentResult'>
+        <id property='id' column='comment_id'/>
+        <result property='postId' column='post_id'/>
+        <result property='name' column='name'/>
+        <result property='email' column='email'/>
+        <result property='body' column='body'/>
+    </resultMap>
+
+    <select id='getCommentsByPostId' resultMap='CommentResult'>
+        SELECT * FROM COMMENTS WHERE POST_ID = #{postId}
+    </select>
+
+</mapper>
