@@ -1,14 +1,11 @@
 package servlets;
 
-import static javax.servlet.http.HttpServletResponse.*;
-
 import com.google.gson.*;
 import model.Post;
+import server.*;
 import service.PostService;
 import utility.ResponseHandler;
 
-import javax.servlet.*;
-import javax.servlet.http.*;
 import java.io.*;
 import java.util.*;
 import java.util.regex.*;
@@ -32,7 +29,7 @@ public class PostsServlet extends HttpServlet {
     }
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String pathInfo = request.getPathInfo();
         if (pathInfo == null || pathInfo.equals("/")) {
             List<Post> posts = service.getAllPosts();
@@ -46,7 +43,7 @@ public class PostsServlet extends HttpServlet {
             Post post = service.getPostById(postId);
 
             if (post == null) {
-                responseHandler.sendError(response, SC_NOT_FOUND, NO_POST_MESSAGE + postId);
+                responseHandler.sendError(response, ResponseStatus.NOT_FOUND, NO_POST_MESSAGE + postId);
             } else {
                 responseHandler.sendAsJson(response, post);
             }
@@ -61,14 +58,14 @@ public class PostsServlet extends HttpServlet {
             return;
         }
 
-        responseHandler.sendError(response, SC_BAD_REQUEST, INVALID_URL_MESSAGE);
+        responseHandler.sendError(response, ResponseStatus.BAD_REQUEST, INVALID_URL_MESSAGE);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String pathInfo = request.getPathInfo();
         if (pathInfo != null && !pathInfo.equals("/")) {
-            responseHandler.sendError(response, SC_BAD_REQUEST, INVALID_URL_MESSAGE);
+            responseHandler.sendError(response, ResponseStatus.BAD_REQUEST, INVALID_URL_MESSAGE);
             return;
         }
 
@@ -76,7 +73,7 @@ public class PostsServlet extends HttpServlet {
         try (BufferedReader reader = request.getReader()) {
             post = gson.fromJson(reader, Post.class);
         } catch (Exception e) {
-            responseHandler.sendError(response, SC_BAD_REQUEST, INVALID_JSON_MESSAGE);
+            responseHandler.sendError(response, ResponseStatus.BAD_REQUEST, INVALID_JSON_MESSAGE);
             return;
         }
 
@@ -89,7 +86,7 @@ public class PostsServlet extends HttpServlet {
         String pathInfo = request.getPathInfo();
         Matcher matcher = SINGLE_POST_PATTERN.matcher(pathInfo);
         if (!matcher.matches()) {
-            responseHandler.sendError(response, SC_BAD_REQUEST, INVALID_URL_MESSAGE);
+            responseHandler.sendError(response, ResponseStatus.BAD_REQUEST, INVALID_URL_MESSAGE);
             return;
         }
 
@@ -97,7 +94,7 @@ public class PostsServlet extends HttpServlet {
         try (BufferedReader reader = request.getReader()) {
             post = gson.fromJson(reader, Post.class);
         } catch (Exception e) {
-            responseHandler.sendError(response, SC_BAD_REQUEST, INVALID_JSON_MESSAGE);
+            responseHandler.sendError(response, ResponseStatus.BAD_REQUEST, INVALID_JSON_MESSAGE);
             return;
         }
 
@@ -106,7 +103,7 @@ public class PostsServlet extends HttpServlet {
         int affectedRows = service.updatePost(post);
 
         if (affectedRows != 1) {
-          responseHandler.sendError(response, SC_NOT_FOUND, NO_POST_MESSAGE + postId + " was updated");
+          responseHandler.sendError(response, ResponseStatus.NOT_FOUND, NO_POST_MESSAGE + postId + " was updated");
           return;
         }
 
@@ -118,7 +115,7 @@ public class PostsServlet extends HttpServlet {
         String pathInfo = request.getPathInfo();
         Matcher matcher = SINGLE_POST_PATTERN.matcher(pathInfo);
         if (!matcher.matches()) {
-            responseHandler.sendError(response, SC_BAD_REQUEST, INVALID_URL_MESSAGE);
+            responseHandler.sendError(response, ResponseStatus.BAD_REQUEST, INVALID_URL_MESSAGE);
             return;
         }
 
@@ -126,7 +123,7 @@ public class PostsServlet extends HttpServlet {
         int affectedRows = service.deletePost(postId);
 
         if (affectedRows != 1) {
-            responseHandler.sendError(response, SC_NOT_FOUND, NO_POST_MESSAGE + postId + " was deleted");
+            responseHandler.sendError(response, ResponseStatus.NOT_FOUND, NO_POST_MESSAGE + postId + " was deleted");
         }
     }
 }

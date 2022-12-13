@@ -2,8 +2,9 @@ package utility;
 
 import com.google.gson.Gson;
 import org.apache.logging.log4j.*;
+import server.HttpServletResponse;
+import server.ResponseStatus;
 
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
@@ -26,7 +27,7 @@ public class ResponseHandler {
         }
     }
 
-    public void sendError(HttpServletResponse response, int status, String message) throws IOException {
+    public void sendError(HttpServletResponse response, ResponseStatus status, String message) throws IOException {
         response.setStatus(status);
         Error error = new Error(status, message);
         sendAsJson(response, error);

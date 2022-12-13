@@ -1,11 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="4c31ff75-3936-4468-834e-8e5307d081ed" name="Changes" comment="" />
+    <list default="true" id="4c31ff75-3936-4468-834e-8e5307d081ed" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/server/RequestDispatcher.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/commons_cli_1_5_0.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/commons_cli_1_5_0.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TomcatBasic.iml" beforeDir="false" afterPath="$PROJECT_DIR$/TomcatBasic.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/HttpServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/HttpServer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/model/User.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/resources/log4j2.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/resources/log4j2.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/resources/mybatis-config.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/resources/mybatis-config.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/server/HttpServerTask.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/HttpServerTask.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/server/HttpServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/HttpServlet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/server/HttpServletContext.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/HttpServletContext.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/server/HttpServletRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/HttpServletRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/server/HttpServletResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/HttpServletResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/server/ResponseStatus.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/ResponseStatus.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/service/UserService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/servlets/CommentsServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/servlets/CommentsServlet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/servlets/PostsServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/servlets/PostsServlet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/servlets/UsersServlet.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utility/GzipCompressor.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utility/HtmlWriter.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utility/ResponseHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/utility/ResponseHandler.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
   </component>
   <component name="ProjectId" id="2IrltBQAVfhuIRPOMo5Iw5RKYtL" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -16,9 +51,24 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true"
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "last_opened_file_path": "D:/IdeaProjects/TomcatBasic/src/utility",
+    "project.structure.last.edited": "Libraries",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "preferences.lookFeel"
   }
 }]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\IdeaProjects\TomcatBasic\src\utility" />
+      <recent name="D:\IdeaProjects\TomcatBasic\src\model" />
+      <recent name="D:\IdeaProjects\TomcatBasic\src\servlets" />
+      <recent name="D:\IdeaProjects\TomcatBasic\src\service" />
+      <recent name="D:\IdeaProjects\TomcatBasic\src\mappers" />
+    </key>
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -29,5 +79,16 @@
       <updated>1670947797561</updated>
     </task>
     <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
 </project>

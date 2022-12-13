@@ -1,13 +1,14 @@
 package servlets;
 
-import static javax.servlet.http.HttpServletResponse.*;
-
 import com.google.gson.*;
 import model.Comment;
+import server.HttpServlet;
+import server.HttpServletRequest;
+import server.HttpServletResponse;
+import server.ResponseStatus;
 import service.CommentService;
 import utility.ResponseHandler;
 
-import javax.servlet.http.*;
 import java.io.*;
 import java.util.List;
 
@@ -26,7 +27,7 @@ public class CommentsServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String pathInfo = request.getPathInfo();
         if (pathInfo != null && !pathInfo.equals("/")) {
-            responseHandler.sendError(response, SC_BAD_REQUEST, "Bad request: invalid url");
+            responseHandler.sendError(response, ResponseStatus.BAD_REQUEST, "Bad request: invalid url");
             return;
         }
 

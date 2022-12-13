@@ -1,2 +1,4 @@
-package server;public class HttpServletContext {
+package server;
+
+public class HttpServletContext {
 }
