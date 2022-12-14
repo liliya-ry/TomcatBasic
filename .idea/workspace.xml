@@ -1,28 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="4c31ff75-3936-4468-834e-8e5307d081ed" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/server/RequestDispatcher.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/commons_cli_1_5_0.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/commons_cli_1_5_0.xml" afterDir="false" />
+    <list default="true" id="4c31ff75-3936-4468-834e-8e5307d081ed" name="Changes" comment="update">
+      <change afterPath="$PROJECT_DIR$/src/tomcat/utility/StatusCode.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/webapp/index.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/webapps/blogApp/src/resources/jdbc.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/index.pb" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/index.pb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TomcatBasic.iml" beforeDir="false" afterPath="$PROJECT_DIR$/TomcatBasic.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HttpServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/HttpServer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/model/User.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/resources/log4j2.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/resources/log4j2.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/resources/mybatis-config.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/resources/mybatis-config.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/server/HttpServerTask.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/HttpServerTask.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/server/HttpServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/HttpServlet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/server/HttpServletContext.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/HttpServletContext.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/server/HttpServletRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/HttpServletRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/server/HttpServletResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/HttpServletResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/server/ResponseStatus.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/ResponseStatus.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/service/UserService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/servlets/CommentsServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/servlets/CommentsServlet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/servlets/PostsServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/servlets/PostsServlet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/servlets/UsersServlet.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utility/GzipCompressor.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utility/HtmlWriter.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utility/ResponseHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/utility/ResponseHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/HttpServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/tomcat/server/HttpServer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/mappers/CommentMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/webapps/blogApp/src/mappers/CommentMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/mappers/CommentMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/webapps/blogApp/src/mappers/CommentMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/mappers/PostMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/webapps/blogApp/src/mappers/PostMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/mappers/PostMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/webapps/blogApp/src/mappers/PostMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/mappers/UserMapper.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/mappers/UserMapper.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/model/Comment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/webapps/blogApp/src/model/Comment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/model/Post.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/webapps/blogApp/src/model/Post.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/resources/log4j2.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/webapps/blogApp/src/resources/log4j2.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/resources/mybatis-config.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/webapps/blogApp/src/resources/mybatis-config.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/server/HttpServerTask.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/tomcat/server/HttpServerTask.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/server/HttpServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/tomcat/servlet/HttpServlet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/server/HttpServletContext.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/tomcat/servlet/HttpServletContext.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/server/HttpServletRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/tomcat/servlet/HttpServletRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/server/HttpServletResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/tomcat/servlet/HttpServletResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/server/RequestDispatcher.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/tomcat/servlet/RequestDispatcher.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/server/ResponseStatus.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/service/CommentService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/webapps/blogApp/src/service/CommentService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/service/PostService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/webapps/blogApp/src/service/PostService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/servlets/CommentsServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/webapps/blogApp/src/servlets/CommentsServlet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/servlets/PostsServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/webapps/blogApp/src/servlets/PostsServlet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utility/Error.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/webapps/blogApp/src/utility/ErrorResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utility/PasswordEncryptor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/webapps/blogApp/src/utility/PasswordEncryptor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utility/ResponseHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/webapps/blogApp/src/utility/ResponseHandler.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -53,8 +63,9 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "last_opened_file_path": "D:/IdeaProjects/TomcatBasic/src/utility",
-    "project.structure.last.edited": "Libraries",
+    "SONARLINT_PRECOMMIT_ANALYSIS": "true",
+    "last_opened_file_path": "D:/IdeaProjects/TomcatBasic/src/webapps/blogApp/src/resources",
+    "project.structure.last.edited": "Global Libraries",
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.2",
     "settings.editor.selected.configurable": "preferences.lookFeel"
@@ -62,12 +73,100 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\IdeaProjects\TomcatBasic\src\webapps\blogApp\src\resources" />
+      <recent name="D:\IdeaProjects\TomcatBasic\src\webapps\blogApp\src" />
+      <recent name="D:\IdeaProjects\TomcatBasic\src\webapps\blogApp\resources" />
       <recent name="D:\IdeaProjects\TomcatBasic\src\utility" />
       <recent name="D:\IdeaProjects\TomcatBasic\src\model" />
-      <recent name="D:\IdeaProjects\TomcatBasic\src\servlets" />
-      <recent name="D:\IdeaProjects\TomcatBasic\src\service" />
-      <recent name="D:\IdeaProjects\TomcatBasic\src\mappers" />
     </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\IdeaProjects\TomcatBasic\src\webapp" />
+      <recent name="D:\IdeaProjects\TomcatBasic\src\webapps\blogApp" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Application.tomcat.server.HttpServer">
+    <configuration name="PostService" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="webapps.blogApp.src.service.PostService" />
+      <module name="TomcatBasic" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="webapps.blogApp.src.service.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Unnamed" type="Application" factoryName="Application" nameIsGenerated="true">
+      <module name="TomcatBasic" />
+      <option name="PROGRAM_PARAMETERS" value="-d D:\IdeaProjects\TomcatBasic -p 8081" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="tomcat.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="tomcat.server.HttpServer" type="Application" factoryName="Application" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="tomcat.server.HttpServer" />
+      <module name="TomcatBasic" />
+      <option name="PROGRAM_PARAMETERS" value="-p 8081 " />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="tomcat.server.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+        <pattern>
+          <option name="PATTERN" value="webapps.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+        <pattern>
+          <option name="PATTERN" value="webapps.blogApp.src.mappers.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+        <pattern>
+          <option name="PATTERN" value="webapps.blogApp.src.model.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+        <pattern>
+          <option name="PATTERN" value="webapps.blogApp.src.service.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+        <pattern>
+          <option name="PATTERN" value="webapps.blogApp.src.servlets.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+        <pattern>
+          <option name="PATTERN" value="webapps.blogApp.src.utility.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+        <pattern>
+          <option name="PATTERN" value="tomcat.servlet.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+        <pattern>
+          <option name="PATTERN" value="tomcat.utility.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="Application.Unnamed" />
+      <item itemvalue="Application.tomcat.server.HttpServer" />
+      <item itemvalue="Application.PostService" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.PostService" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -78,6 +177,14 @@
       <option name="presentableId" value="Default" />
       <updated>1670947797561</updated>
     </task>
+    <task id="LOCAL-00001" summary="update">
+      <created>1670953816398</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1670953816398</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -90,5 +197,9 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="update" />
+    <option name="LAST_COMMIT_MESSAGE" value="update" />
   </component>
 </project>
