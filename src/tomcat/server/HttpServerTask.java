@@ -19,8 +19,8 @@ import java.util.regex.Pattern;
 public class HttpServerTask implements Runnable {
     private static final String DEFAULT_PROTOCOL = "HTTP/1.0";
     private static final Logger LOGGER = LogManager.getLogger(HttpServerTask.class);
-    private static final Map<String, HttpServlet> SERVLETS = Map.of("/comments/*", new CommentsServlet(),
-            "/posts/*", new PostsServlet());
+    private static final Map<String, HttpServlet> SERVLETS = Map.of("/comments", new CommentsServlet(),
+            "/posts", new PostsServlet());
 
     private final Socket clientSocket;
     private final String webRoot;
@@ -49,7 +49,12 @@ public class HttpServerTask implements Runnable {
                 return;
             }
 
-            String servletPath = path.substring(webRoot.length());
+            int lastIndex = path.indexOf("/");
+            if (lastIndex == -1) {
+                lastIndex = path.length();
+            }
+
+            String servletPath = path.substring(webRoot.length(), lastIndex);
             System.out.println(servletPath);
             HttpServlet servlet = SERVLETS.get(servletPath);
             if (servlet == null) {

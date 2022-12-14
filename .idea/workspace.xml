@@ -2,37 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4c31ff75-3936-4468-834e-8e5307d081ed" name="Changes" comment="update">
-      <change afterPath="$PROJECT_DIR$/src/tomcat/utility/StatusCode.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/webapp/index.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/webapps/blogApp/src/resources/jdbc.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/index.pb" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/index.pb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TomcatBasic.iml" beforeDir="false" afterPath="$PROJECT_DIR$/TomcatBasic.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HttpServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/tomcat/server/HttpServer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/mappers/CommentMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/webapps/blogApp/src/mappers/CommentMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/mappers/CommentMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/webapps/blogApp/src/mappers/CommentMapper.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/mappers/PostMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/webapps/blogApp/src/mappers/PostMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/mappers/PostMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/webapps/blogApp/src/mappers/PostMapper.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/mappers/UserMapper.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/mappers/UserMapper.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/model/Comment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/webapps/blogApp/src/model/Comment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/model/Post.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/webapps/blogApp/src/model/Post.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/resources/log4j2.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/webapps/blogApp/src/resources/log4j2.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/resources/mybatis-config.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/webapps/blogApp/src/resources/mybatis-config.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/server/HttpServerTask.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/tomcat/server/HttpServerTask.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/server/HttpServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/tomcat/servlet/HttpServlet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/server/HttpServletContext.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/tomcat/servlet/HttpServletContext.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/server/HttpServletRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/tomcat/servlet/HttpServletRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/server/HttpServletResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/tomcat/servlet/HttpServletResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/server/RequestDispatcher.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/tomcat/servlet/RequestDispatcher.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/server/ResponseStatus.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/service/CommentService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/webapps/blogApp/src/service/CommentService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/service/PostService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/webapps/blogApp/src/service/PostService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/servlets/CommentsServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/webapps/blogApp/src/servlets/CommentsServlet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/servlets/PostsServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/webapps/blogApp/src/servlets/PostsServlet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utility/Error.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/webapps/blogApp/src/utility/ErrorResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utility/PasswordEncryptor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/webapps/blogApp/src/utility/PasswordEncryptor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utility/ResponseHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/webapps/blogApp/src/utility/ResponseHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/tomcat/server/HttpServerTask.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/tomcat/server/HttpServerTask.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/tomcat/servlet/HttpServletResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/tomcat/servlet/HttpServletResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/webapps/blogApp/src/servlets/CommentsServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/webapps/blogApp/src/servlets/CommentsServlet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/webapps/blogApp/src/servlets/PostsServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/webapps/blogApp/src/servlets/PostsServlet.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -184,7 +158,14 @@
       <option name="project" value="LOCAL" />
       <updated>1670953816398</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="update">
+      <created>1671048771189</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1671048771189</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">

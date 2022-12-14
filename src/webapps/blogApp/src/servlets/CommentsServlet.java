@@ -15,6 +15,10 @@ public class CommentsServlet extends HttpServlet {
     private CommentService service;
     private ResponseHandler responseHandler;
 
+    public CommentsServlet() {
+        init();
+    }
+
     @Override
     public void init() {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();

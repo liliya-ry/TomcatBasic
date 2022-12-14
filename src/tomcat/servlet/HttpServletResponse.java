@@ -1,11 +1,7 @@
 package tomcat.servlet;
 
 import java.io.*;
-import java.net.Socket;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.time.Instant;
-import java.util.Date;
+import java.net.Socket;;
 
 public class HttpServletResponse {
     private static final String DEFAULT_CONTENT_TYPE = "text/html";

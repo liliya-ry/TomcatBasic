@@ -21,6 +21,10 @@ public class PostsServlet extends HttpServlet {
     private PostService service;
     private ResponseHandler responseHandler;
 
+    public PostsServlet() {
+        init();
+    }
+
     @Override
     public void init() {
         gson = new GsonBuilder().setPrettyPrinting().create();
@@ -32,7 +36,7 @@ public class PostsServlet extends HttpServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String pathInfo = request.getContextPath();
         System.out.println(pathInfo);
-        if (pathInfo == null || pathInfo.equals("/blogApp/posts")) {
+        if (pathInfo == null || pathInfo.equals("/")) {
             List<Post> posts = service.getAllPosts();
             responseHandler.sendAsJson(response, posts);
             return;
