@@ -1,5 +1,9 @@
 package tomcat.servlet;
 
+import tomcat.servlet.request.HttpServletRequest;
+
+import static tomcat.servlet.HttpServletResponse.SC_NOT_IMPLEMENTED;
+
 import java.io.IOException;
 
 public abstract class HttpServlet {
@@ -8,10 +12,23 @@ public abstract class HttpServlet {
     }
 
     protected void init() {}
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {}
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {}
-    protected void doPut(HttpServletRequest request, HttpServletResponse response) throws IOException {}
-    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws IOException {}
+
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        response.sendError(SC_NOT_IMPLEMENTED);
+    }
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        response.sendError(SC_NOT_IMPLEMENTED);
+    }
+
+    protected void doPut(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        response.sendError(SC_NOT_IMPLEMENTED);
+    }
+
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        response.sendError(SC_NOT_IMPLEMENTED);
+    }
+
     public void service(HttpServletRequest request, HttpServletResponse response) throws IOException {
         switch (request.getMethod()) {
             case "GET" -> doGet(request, response);

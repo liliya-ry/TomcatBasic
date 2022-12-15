@@ -1,116 +1,71 @@
 package tomcat.server;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import tomcat.servlet.HttpServlet;
-import tomcat.servlet.HttpServletRequest;
-import tomcat.servlet.HttpServletResponse;
-
+import org.apache.logging.log4j.*;
+import tomcat.servlet.request.*;
+import tomcat.servlet_context.ServletContext;
+import tomcat.servlet.*;
 import tomcat.utility.StatusCode;
-import webapps.blogApp.src.servlets.CommentsServlet;
-import webapps.blogApp.src.servlets.PostsServlet;
-
+import webapps.blogApp.src.servlets.*;
 import java.io.IOException;
 import java.net.Socket;
-import java.nio.file.Path;
-import java.util.List;
 import java.util.Map;
-import java.util.regex.Pattern;
 
 public class HttpServerTask implements Runnable {
-    private static final String DEFAULT_PROTOCOL = "HTTP/1.0";
     private static final Logger LOGGER = LogManager.getLogger(HttpServerTask.class);
-    private static final List<String> PATTERNS = List.of("/comments", "/posts");
-    private static final List<HttpServlet> SERVLETS = List.of(new CommentsServlet(), new PostsServlet());
+    private static final Map<String, String> PATTERNS = Map.of("CommentsServlet", "/comments", "PostsServlet", "/posts");
+    private static final Map<String, Class<?>> SERVLETS = Map.of("CommentsServlet", CommentsServlet.class, "PostsServlet", PostsServlet.class);
 
     private final Socket clientSocket;
-    private final String webRoot;
+    private final ServletContext servletContext;
 
 
-    HttpServerTask(Socket clientSocket, String webRoot) {
+    HttpServerTask(Socket clientSocket, String contextPath) {
         this.clientSocket = clientSocket;
-        this.webRoot = webRoot;
+        this.servletContext = new ServletContext(contextPath, SERVLETS, PATTERNS);
     }
 
     @Override
     public void run() {
         try {
             HttpServletRequest request = getRequest();
-
             if (request == null) {
                 return;
             }
-
             logRequest(request);
-
-            String path = request.getContextPath();
-
-            for (int i = 0; i < PATTERNS.size(); i++) {
-                String pattern = PATTERNS.get(i);
-                if (!path.startsWith(pattern)) {
-                    continue;
-                }
-
-                String pathInfo = path.substring(pattern.length());
-                if (pathInfo.isEmpty() || pathInfo.startsWith("/?")) {
-                    pathInfo = "/";
-;                }
-                request.setPathInfo(pathInfo);
-                System.out.println();
-                HttpServletResponse response = new HttpServletResponse(clientSocket, request.getProtocol(), HttpServletResponse.SC_OK);
-                HttpServlet servlet = SERVLETS.get(i);
-                servlet.service(request, response);
-                return;
-            }
-
-            sendNotFoundResponse(request);
+            String path = request.getRequestURI();
+            HttpServletResponse response = new HttpServletResponse(clientSocket, request.getProtocol());
+            RequestDispatcher requestDispatcher = request.getRequestDispatcher(path);
+            requestDispatcher.forward(request, response);
         } catch (IOException e) {
-            System.out.println(e);
+            LOGGER.error("Could not send response");
         }
     }
 
     private HttpServletRequest getRequest() throws IOException {
-        HttpServletRequest request;
+        HttpServletRequest request = null;
         try {
-            request = new HttpServletRequest(clientSocket);
+            request = new HttpServletRequest(clientSocket, servletContext);
         } catch (IOException e) {
             sendBadRequestResponse();
             return null;
-        }
+        } catch (NullPointerException e) {}
         return request;
     }
 
     private void logRequest(HttpServletRequest request) {
         String userAgent = request.getHeader("User-Agent");
-        LOGGER.info("{} {} {}", request.getMethod(), request.getContextPath(), userAgent);
+        LOGGER.info("{} {} {}", request.getMethod(), request.getRequestURI(), userAgent);
     }
 
     private void logError(HttpServletRequest request, StatusCode statusCode) {
         String method = request != null ? request.getMethod() : "unknown";
-        String path = request != null ? request.getContextPath() : "unknown";
+        String path = request != null ? request.getRequestURI() : "unknown";
         LOGGER.error("{} {} Error ({}): \"{}\"", method, path, statusCode.code, statusCode.message);
     }
 
-
-    private void sendNotFoundResponse(HttpServletRequest request) throws IOException {
-        String protocol = request != null ? request.getProtocol() : DEFAULT_PROTOCOL;
-        HttpServletResponse response = new HttpServletResponse(clientSocket, protocol, HttpServletResponse.SC_NOT_FOUND);
-        //response.sendResponse();
-        logError(request, StatusCode.NOT_FOUND);
-    }
-
     private void sendBadRequestResponse() throws IOException {
-        HttpServletResponse response = new HttpServletResponse(clientSocket, DEFAULT_PROTOCOL, HttpServletResponse.SC_BAD_REQUEST);
-        //response.sendResponse();
+        HttpServletResponse response = new HttpServletResponse(clientSocket, null);
+        response.sendError(HttpServletResponse.SC_BAD_REQUEST);
         logError(null, StatusCode.BAD_REQUEST);
     }
-
-    private void sendOKResponse(HttpServletRequest request, Path filePath) throws IOException {
-        HttpServletResponse response = new HttpServletResponse(clientSocket, request.getProtocol(), HttpServletResponse.SC_OK);
-        //response.sendResponse();
-    }
-
-
-
-
 }

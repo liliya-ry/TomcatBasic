@@ -18,7 +18,7 @@ public class ResponseHandler {
         this.logger = LogManager.getLogger("BlogApiLogger");
     }
 
-    public void sendAsJson(HttpServletResponse response, Object obj) throws IOException {
+    public void sendAsJson(HttpServletResponse response, Object obj) {
         response.setStatus(HttpServletResponse.SC_OK);
         response.setContentType(CONTENT_TYPE);
         String json = gson.toJson(obj);
@@ -29,7 +29,7 @@ public class ResponseHandler {
         }
     }
 
-    public void sendError(HttpServletResponse response, int status, String message) throws IOException {
+    public void sendError(HttpServletResponse response, int status, String message) {
         response.setStatus(status);
         ErrorResponse errorResponse = new ErrorResponse(status, message);
         sendAsJson(response, errorResponse);

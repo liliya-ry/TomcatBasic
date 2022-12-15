@@ -4,7 +4,7 @@ import com.google.gson.*;
 import webapps.blogApp.src.service.CommentService;
 import webapps.blogApp.src.model.Comment;
 import tomcat.servlet.HttpServlet;
-import tomcat.servlet.HttpServletRequest;
+import tomcat.servlet.request.HttpServletRequest;
 import tomcat.servlet.HttpServletResponse;
 import webapps.blogApp.src.utility.ResponseHandler;
 

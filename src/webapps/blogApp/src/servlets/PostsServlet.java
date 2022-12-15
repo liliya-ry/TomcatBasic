@@ -1,6 +1,8 @@
 package webapps.blogApp.src.servlets;
 
 import com.google.gson.*;
+import tomcat.servlet.request.HttpServletRequest;
+import tomcat.servlet.request.RequestDispatcher;
 import webapps.blogApp.src.service.PostService;
 import webapps.blogApp.src.model.Post;
 import tomcat.servlet.*;
@@ -35,7 +37,6 @@ public class PostsServlet extends HttpServlet {
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String pathInfo = request.getPathInfo();
-        System.out.println("servlet "  + pathInfo);
         if (pathInfo == null || pathInfo.equals("/")) {
             List<Post> posts = service.getAllPosts();
             responseHandler.sendAsJson(response, posts);
