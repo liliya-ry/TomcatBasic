@@ -24,8 +24,6 @@ public class ResponseHandler {
         String json = gson.toJson(obj);
         try (PrintWriter writer = response.getWriter()) {
             writer.print(json);
-            writer.print("\r\n\r\n");
-            writer.flush();
         }
     }
 

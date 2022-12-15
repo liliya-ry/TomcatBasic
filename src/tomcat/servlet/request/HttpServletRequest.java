@@ -10,14 +10,14 @@ public class HttpServletRequest {
     private static final Set<String> VALID_PROTOCOLS;
     private static final Set<String> VALID_METHODS;
 
+    private final Map<String, String> headers = new HashMap<>();
+    private final Map<String, String> parameters = new HashMap<>();
     private String protocol;
     private String method;
     private String requestURI;
     private String servletPath;
     private String pathInfo;
 
-    private final Map<String, String> headers = new HashMap<>();
-    private final Map<String, String> parameters = new HashMap<>();
     private String body = null;
     private BufferedReader reader;
     private final ServletContext context;
@@ -140,10 +140,6 @@ public class HttpServletRequest {
 
     public String getContextPath() {
         return context.getContextPath();
-    }
-
-    void setPathInfo(String pathInfo) {
-        this.pathInfo = pathInfo;
     }
 
     public String getPathInfo() {

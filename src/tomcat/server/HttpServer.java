@@ -35,15 +35,15 @@ public class HttpServer {
             return;
         }
 
-        String webRoot = arguments.length == 1 ? arguments[0] : DEFAULT_DIRECTORY;
+        String contextPath = arguments.length == 1 ? arguments[0] : DEFAULT_DIRECTORY;
         String optionStr = cmd.getOptionValue("p");
         int port = optionStr != null ? Integer.parseInt(optionStr) : DEFAULT_PORT;
-        printStart(port, webRoot);
+        printStart(port, contextPath);
 
         optionStr = cmd.getOptionValue("t");
         int poolSize = optionStr != null ? Integer.parseInt(optionStr) : DEFAULT_THREAD_POOL_SIZE;
 
-        startServer(port, poolSize, webRoot);
+        startServer(port, poolSize, contextPath);
     }
 
     private static Options createOptions() {
@@ -68,12 +68,12 @@ public class HttpServer {
         System.out.println("Usage: http-server [path] [options]");
     }
 
-    private static void printStart(int port, String webRoot) {
-        System.out.println("Starting up http-server, serving " + webRoot);
+    private static void printStart(int port, String contextPath) {
+        System.out.println("Starting up http-server, serving " + contextPath);
         System.out.println("Available on:");
-        System.out.println("  http://192.168.8.151:" + port + "/blogApp");
-        System.out.println("  http://127.0.0.1:" + port + "/blogApp");
-        System.out.println("  http://localhost:" + port + "/blogApp");
+        System.out.println("  http://192.168.8.151:" + port + contextPath);
+        System.out.println("  http://127.0.0.1:" + port + contextPath);
+        System.out.println("  http://localhost:" + port + contextPath);
         System.out.println("Hit CTRL-C to stop the server");
     }
 

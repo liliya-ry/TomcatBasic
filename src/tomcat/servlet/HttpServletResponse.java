@@ -36,16 +36,9 @@ public class HttpServletResponse {
         writer.flush();
     }
 
-    private void printEnd() {
-        writer.print("\r\n\r\n");
-        writer.flush();
-        writer.close();
-    }
-
     public void sendError(int status) {
         this.status = status;
         printHeaders();
-        printEnd();
     }
 
     public void setStatus(int status) {
