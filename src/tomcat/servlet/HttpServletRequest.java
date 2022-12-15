@@ -8,21 +8,29 @@ public class HttpServletRequest {
     private static final Set<String> VALID_PROTOCOLS = Set.of("HTTP/0.9", "HTTP/1.0", "HTTP/1.1", "HTTP/2.0.");
     private static final Set<String> VALID_METHODS = Set.of("GET", "POST", "PUT", "DELETE");
 
-    private final String method;
+    private String method;
     private String contextPath;
     private String pathInfo;
-    private final String protocol;
+    private String protocol;
     private String host;
     private final Map<String, String> headers = new HashMap<>();
     private final Map<String, String> parameters = new HashMap<>();
     private String body = null;
-    private final BufferedReader reader;
+    private Socket clientSocket;
 
     public HttpServletRequest(Socket clientSocket) throws IOException {
+        this.clientSocket = clientSocket;
         InputStream clientInputStream = clientSocket.getInputStream();
         var in = new InputStreamReader(clientInputStream);
-        this.reader = new BufferedReader(in);
+        BufferedReader reader = new BufferedReader(in);
 
+        readFirstLine(reader);
+        readHeaders(reader);
+
+        readBody(reader);
+    }
+
+    private void readFirstLine(BufferedReader reader) throws IOException {
         String[] firstLineParts = reader.readLine().split(" ");
         if (firstLineParts.length != 3) {
             throw new IOException("Missing method/protocol/path");
@@ -40,15 +48,6 @@ public class HttpServletRequest {
         if (!VALID_PROTOCOLS.contains(protocol)) {
             throw new IOException("Invalid protocol");
         }
-
-        readHeaders(reader);
-
-        host = headers.getOrDefault("Host", null);
-        if (host == null) {
-            throw new IOException("Missing host");
-        }
-
-        readBody(reader);
     }
 
     private void readBody(BufferedReader br) throws IOException {
@@ -72,6 +71,11 @@ public class HttpServletRequest {
             String headerName = parts[0];
             String headerValue = parts[1];
             headers.put(headerName, headerValue);
+        }
+
+        host = headers.getOrDefault("Host", null);
+        if (host == null) {
+            throw new IOException("Missing host");
         }
     }
 
@@ -117,7 +121,8 @@ public class HttpServletRequest {
     }
 
     public BufferedReader getReader() {
-        return this.reader;
+        StringReader stringReader = new StringReader(body);
+        return new BufferedReader(stringReader);
     }
 
     public String getProtocol() {

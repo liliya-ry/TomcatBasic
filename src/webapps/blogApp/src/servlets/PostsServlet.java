@@ -34,8 +34,8 @@ public class PostsServlet extends HttpServlet {
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String pathInfo = request.getContextPath();
-        System.out.println(pathInfo);
+        String pathInfo = request.getPathInfo();
+        System.out.println("servlet "  + pathInfo);
         if (pathInfo == null || pathInfo.equals("/")) {
             List<Post> posts = service.getAllPosts();
             responseHandler.sendAsJson(response, posts);
@@ -68,7 +68,7 @@ public class PostsServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String pathInfo = request.getContextPath();
+        String pathInfo = request.getPathInfo();
         if (pathInfo != null && !pathInfo.equals("/")) {
             responseHandler.sendError(response, HttpServletResponse.SC_BAD_REQUEST, INVALID_URL_MESSAGE);
             return;
@@ -88,7 +88,7 @@ public class PostsServlet extends HttpServlet {
 
     @Override
     protected void doPut(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String pathInfo = request.getContextPath();
+        String pathInfo = request.getPathInfo();
         Matcher matcher = SINGLE_POST_PATTERN.matcher(pathInfo);
         if (!matcher.matches()) {
             responseHandler.sendError(response, HttpServletResponse.SC_BAD_REQUEST, INVALID_URL_MESSAGE);
@@ -117,7 +117,7 @@ public class PostsServlet extends HttpServlet {
 
     @Override
     protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String pathInfo = request.getContextPath();
+        String pathInfo = request.getPathInfo();
         Matcher matcher = SINGLE_POST_PATTERN.matcher(pathInfo);
         if (!matcher.matches()) {
             responseHandler.sendError(response, HttpServletResponse.SC_BAD_REQUEST, INVALID_URL_MESSAGE);
@@ -130,5 +130,7 @@ public class PostsServlet extends HttpServlet {
         if (affectedRows != 1) {
             responseHandler.sendError(response, HttpServletResponse.SC_NOT_FOUND, NO_POST_MESSAGE + postId + " was deleted");
         }
+
+        responseHandler.sendAsJson(response, postId);
     }
 }

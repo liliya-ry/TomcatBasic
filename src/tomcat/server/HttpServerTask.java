@@ -13,14 +13,15 @@ import webapps.blogApp.src.servlets.PostsServlet;
 import java.io.IOException;
 import java.net.Socket;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
 public class HttpServerTask implements Runnable {
     private static final String DEFAULT_PROTOCOL = "HTTP/1.0";
     private static final Logger LOGGER = LogManager.getLogger(HttpServerTask.class);
-    private static final Map<String, HttpServlet> SERVLETS = Map.of("/comments", new CommentsServlet(),
-            "/posts", new PostsServlet());
+    private static final List<String> PATTERNS = List.of("/comments", "/posts");
+    private static final List<HttpServlet> SERVLETS = List.of(new CommentsServlet(), new PostsServlet());
 
     private final Socket clientSocket;
     private final String webRoot;
@@ -43,29 +44,26 @@ public class HttpServerTask implements Runnable {
             logRequest(request);
 
             String path = request.getContextPath();
-            int indexOfRoot = path.indexOf(webRoot);
-            if (indexOfRoot != 0) {
-                sendBadRequestResponse();
+
+            for (int i = 0; i < PATTERNS.size(); i++) {
+                String pattern = PATTERNS.get(i);
+                if (!path.startsWith(pattern)) {
+                    continue;
+                }
+
+                String pathInfo = path.substring(pattern.length());
+                if (pathInfo.isEmpty() || pathInfo.startsWith("/?")) {
+                    pathInfo = "/";
+;                }
+                request.setPathInfo(pathInfo);
+                System.out.println();
+                HttpServletResponse response = new HttpServletResponse(clientSocket, request.getProtocol(), HttpServletResponse.SC_OK);
+                HttpServlet servlet = SERVLETS.get(i);
+                servlet.service(request, response);
                 return;
             }
 
-            int lastIndex = path.indexOf("/");
-            if (lastIndex == -1) {
-                lastIndex = path.length();
-            }
-
-            String servletPath = path.substring(webRoot.length(), lastIndex);
-            System.out.println(servletPath);
-            HttpServlet servlet = SERVLETS.get(servletPath);
-            if (servlet == null) {
-                sendNotFoundResponse(request);
-                return;
-            }
-
-            request.setPathInfo(path.substring(webRoot.length() + servletPath.length()));
-            System.out.println(request.getPathInfo());
-            HttpServletResponse response = new HttpServletResponse(clientSocket, request.getProtocol(), HttpServletResponse.SC_OK);
-            servlet.service(request, response);
+            sendNotFoundResponse(request);
         } catch (IOException e) {
             System.out.println(e);
         }

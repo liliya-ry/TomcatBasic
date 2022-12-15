@@ -28,7 +28,7 @@ public class CommentsServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String pathInfo = request.getContextPath();
+        String pathInfo = request.getPathInfo();
         if (pathInfo != null && !pathInfo.equals("/")) {
             responseHandler.sendError(response, HttpServletResponse.SC_BAD_REQUEST, "Bad request: invalid url");
             return;
