@@ -1,7 +1,6 @@
 package tomcat.servlet.request;
 
 import tomcat.servlet_context.ServletContext;
-
 import java.io.*;
 import java.net.Socket;
 import java.util.*;
@@ -12,16 +11,15 @@ public class HttpServletRequest {
 
     private final Map<String, String> headers = new HashMap<>();
     private final Map<String, String> parameters = new HashMap<>();
+    private final ServletContext context;
+    private final RequestDispatcher dispatcher;
     private String protocol;
     private String method;
-    private String requestURI;
-    private String servletPath;
-    private String pathInfo;
-
     private String body = null;
+    private String requestURI;
+    private String afterContextPath;
     private BufferedReader reader;
-    private final ServletContext context;
-    private Class<?> servletClass;
+
 
     static {
         VALID_PROTOCOLS = Set.of("HTTP/0.9", "HTTP/1.0", "HTTP/1.1", "HTTP/2.0.");
@@ -35,7 +33,7 @@ public class HttpServletRequest {
         readHeaders();
         setHost();
         readBody();
-        processPaths();
+        dispatcher = new RequestDispatcher(context, afterContextPath);
     }
 
     private void setReader(Socket clientSocket) throws IOException {
@@ -98,6 +96,8 @@ public class HttpServletRequest {
     private void readParameters(String path) {
         String[] pathParts = path.split("\\?");
         requestURI = pathParts[0];
+        int startIndex = context.getContextPath().length();
+        afterContextPath = requestURI.substring(startIndex);
 
         if (pathParts.length != 2) {
             return;
@@ -112,30 +112,8 @@ public class HttpServletRequest {
         }
     }
 
-    private void processPaths() {
-        int startIndex = context.getContextPath().length();
-        String afterContext = requestURI.substring(startIndex);
-
-        for (Map.Entry<String, String> patternEntry : context.getServletMappings().entrySet()) {
-            String pattern = patternEntry.getValue();
-            if (!afterContext.startsWith(pattern)) {
-                continue;
-            }
-
-            servletPath = pattern;
-            pathInfo = afterContext.substring(pattern.length());
-            if (pathInfo.isEmpty() || pathInfo.startsWith("/?")) {
-                pathInfo = "/";
-            }
-
-            String servletName = patternEntry.getKey();
-            servletClass = context.getServlets().get(servletName);
-            return;
-        }
-    }
-
     public String getHeader(String name) {
-        return this.headers.get(name);
+        return headers.get(name);
     }
 
     public String getContextPath() {
@@ -143,7 +121,7 @@ public class HttpServletRequest {
     }
 
     public String getPathInfo() {
-        return pathInfo;
+        return dispatcher.pathInfo;
     }
 
     public String getParameter(String name) {
@@ -168,11 +146,15 @@ public class HttpServletRequest {
     }
 
     public String getServletPath() {
-        return servletPath;
+        return dispatcher.servletPath;
     }
 
     public RequestDispatcher getRequestDispatcher(String s) {
-        processPaths();
-        return new RequestDispatcher(servletClass);
+        return new RequestDispatcher(context, s);
     }
+
+    public RequestDispatcher getRequestDispatcher() {
+        return dispatcher;
+    }
+
 }

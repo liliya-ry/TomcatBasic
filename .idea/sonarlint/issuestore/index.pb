@@ -21,7 +21,5 @@ _
 .src/webapps/blogApp/src/mappers/PostMapper.xml,0\6\06f49d5390b000800ba9b3917af23fb25b040a7f
 R
 "src/tomcat/utility/StatusCode.java,4\d\4d9673487ae9a24b9370e3035ddbc5f816e1c2c0
-c
-3src/webapps/blogApp/src/service/CommentService.java,2\4\24484abf69af3cbcaffa6e709777bd0887bc6590
-`
-0src/webapps/blogApp/src/service/PostService.java,5\0\50ee504410ef83000d91fb2de3905ca57396f407
+d
+4src/webapps/blogApp/src/utility/ResponseHandler.java,f\e\fe87bec9bda074d8204cc26162afe70fdb4f51c1

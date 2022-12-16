@@ -12,10 +12,36 @@ import java.util.Map;
 
 public class RequestDispatcher {
     Map<Class<?>, HttpServlet> servlets = new HashMap<>();
-    private final Class<?> servletClass;
+    private ServletContext context;
+    private Class<?> servletClass;
+    private String url;
+    String servletPath;
+    String pathInfo;
 
-    public RequestDispatcher(Class<?> servletClass) {
-        this.servletClass = servletClass;
+
+    RequestDispatcher(ServletContext context, String url) {
+        this.context = context;
+        this.url = url;
+        processPaths();
+    }
+
+    private void processPaths() {
+        for (Map.Entry<String, String> patternEntry : context.getServletMappings().entrySet()) {
+            String pattern = patternEntry.getValue();
+            if (!url.startsWith(pattern)) {
+                continue;
+            }
+
+            servletPath = pattern;
+            pathInfo = url.substring(pattern.length());
+            if (pathInfo.isEmpty() || pathInfo.startsWith("/?")) {
+                pathInfo = "/";
+            }
+
+            String servletName = patternEntry.getKey();
+            servletClass = context.getServlets().get(servletName);
+            return;
+        }
     }
 
     public void forward(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -31,4 +57,6 @@ public class RequestDispatcher {
         servlets.put(servletClass, servlet);
         servlet.service(request, response);
     }
+
+
 }

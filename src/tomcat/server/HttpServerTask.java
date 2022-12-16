@@ -5,23 +5,18 @@ import tomcat.servlet.request.*;
 import tomcat.servlet_context.ServletContext;
 import tomcat.servlet.*;
 import tomcat.utility.StatusCode;
-import webapps.blogApp.src.servlets.*;
 import java.io.IOException;
 import java.net.Socket;
-import java.util.Map;
 
 public class HttpServerTask implements Runnable {
     private static final Logger LOGGER = LogManager.getLogger(HttpServerTask.class);
-    private static final Map<String, String> PATTERNS = Map.of("CommentsServlet", "/comments", "PostsServlet", "/posts");
-    private static final Map<String, Class<?>> SERVLETS = Map.of("CommentsServlet", CommentsServlet.class, "PostsServlet", PostsServlet.class);
 
     private final Socket clientSocket;
     private final ServletContext servletContext;
 
-
-    HttpServerTask(Socket clientSocket, String contextPath) {
+    HttpServerTask(Socket clientSocket, ServletContext servletContext) {
         this.clientSocket = clientSocket;
-        this.servletContext = new ServletContext(contextPath, SERVLETS, PATTERNS);
+        this.servletContext = servletContext;
     }
 
     @Override
@@ -32,9 +27,8 @@ public class HttpServerTask implements Runnable {
                 return;
             }
             logRequest(request);
-            String path = request.getRequestURI();
             HttpServletResponse response = new HttpServletResponse(clientSocket, request.getProtocol());
-            RequestDispatcher requestDispatcher = request.getRequestDispatcher(path);
+            RequestDispatcher requestDispatcher = request.getRequestDispatcher();
             requestDispatcher.forward(request, response);
         } catch (IOException e) {
             LOGGER.error("Could not send response");

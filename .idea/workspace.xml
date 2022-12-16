@@ -2,18 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4c31ff75-3936-4468-834e-8e5307d081ed" name="Changes" comment="update">
-      <change afterPath="$PROJECT_DIR$/src/tomcat/servlet/request/RequestDispatcher.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/index.pb" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/index.pb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/tomcat/server/HttpServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/tomcat/server/HttpServer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/tomcat/server/HttpServerTask.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/tomcat/server/HttpServerTask.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/tomcat/servlet/HttpServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/tomcat/servlet/HttpServlet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/tomcat/servlet/HttpServletContext.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/tomcat/servlet/HttpServletRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/tomcat/servlet/request/HttpServletRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/tomcat/servlet/HttpServletResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/tomcat/servlet/HttpServletResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/tomcat/servlet/RequestDispatcher.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/webapps/blogApp/src/servlets/CommentsServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/webapps/blogApp/src/servlets/CommentsServlet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/webapps/blogApp/src/servlets/PostsServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/webapps/blogApp/src/servlets/PostsServlet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/webapps/blogApp/src/utility/ResponseHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/webapps/blogApp/src/utility/ResponseHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/tomcat/servlet/request/HttpServletRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/tomcat/servlet/request/HttpServletRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/tomcat/servlet/request/RequestDispatcher.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/tomcat/servlet/request/RequestDispatcher.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/tomcat/servlet_context/ServletContext.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/tomcat/servlet_context/ServletContext.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -65,7 +60,7 @@
       <recent name="D:\IdeaProjects\TomcatBasic\src\webapps\blogApp" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.tomcat.server.HttpServer">
+  <component name="RunManager" selected="Application.HttpServer">
     <configuration name="HttpServer" type="Application" factoryName="Application" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="tomcat.server.HttpServer" />
       <module name="TomcatBasic" />
@@ -125,6 +120,19 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="ServletContext" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="tomcat.servlet_context.ServletContext" />
+      <module name="TomcatBasic" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="tomcat.servlet_context.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="Unnamed" type="Application" factoryName="Application" nameIsGenerated="true">
       <module name="TomcatBasic" />
       <option name="PROGRAM_PARAMETERS" value="-d D:\IdeaProjects\TomcatBasic -p 8081" />
@@ -139,12 +147,14 @@
       </method>
     </configuration>
     <list>
+      <item itemvalue="Application.HttpServer" />
       <item itemvalue="Application.Unnamed" />
-      <item itemvalue="Application.tomcat.server.HttpServer" />
+      <item itemvalue="Application.ServletContext" />
       <item itemvalue="Application.PostService" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.ServletContext" />
         <item itemvalue="Application.PostService" />
       </list>
     </recent_temporary>
@@ -179,7 +189,28 @@
       <option name="project" value="LOCAL" />
       <updated>1671049481126</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="update">
+      <created>1671132813153</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1671132813153</updated>
+    </task>
+    <task id="LOCAL-00005" summary="update">
+      <created>1671133005849</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1671133005849</updated>
+    </task>
+    <task id="LOCAL-00006" summary="update">
+      <created>1671134801326</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1671134801326</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
