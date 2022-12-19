@@ -25,6 +25,7 @@ public class RequestDispatcher {
         processPaths();
     }
 
+    //TODO: if servlet with this url doesn't exist
     private void processPaths() {
         for (Map.Entry<String, String> patternEntry : context.getServletMappings().entrySet()) {
             String pattern = patternEntry.getValue();
@@ -49,12 +50,13 @@ public class RequestDispatcher {
         if (servlet == null) {
             try {
                 servlet = (HttpServlet) servletClass.getDeclaredConstructor().newInstance();
+                servlet.init();
+                servlets.put(servletClass, servlet);
             } catch (Exception e) {
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST); //change error type
                 return;
             }
         }
-        servlets.put(servletClass, servlet);
         servlet.service(request, response);
     }
 
