@@ -23,3 +23,15 @@ R
 "src/tomcat/utility/StatusCode.java,4\d\4d9673487ae9a24b9370e3035ddbc5f816e1c2c0
 d
 4src/webapps/blogApp/src/utility/ResponseHandler.java,f\e\fe87bec9bda074d8204cc26162afe70fdb4f51c1
+`
+0src/webapps/blogApp/src/service/PostService.java,5\0\50ee504410ef83000d91fb2de3905ca57396f407
+c
+3src/webapps/blogApp/src/service/CommentService.java,2\4\24484abf69af3cbcaffa6e709777bd0887bc6590
+b
+2src/webapps/blogApp/src/servlets/PostsServlet.java,f\4\f498da9daf188a64e1e7b03863288d3bdbb4b2ac
+c
+3src/webapps/blogApp/src/main/webapp/WEB-INF/web.xml,3\c\3c7643c3610e4f2bba5cfa15127a28cadfa80c02
+b
+2src/tomcat/servlet_context/FilterRegistration.java,f\d\fdd30ee69d867a40f279a44c49c34f08d907514b
+e
+5src/webapps/blogApp/src/servlets/CommentsServlet.java,4\4\444f5cc4b11cc399c6a4bb7f2c967500cbc521b1

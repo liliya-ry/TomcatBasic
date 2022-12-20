@@ -2,6 +2,7 @@ package tomcat.servlet.request;
 
 import tomcat.servlet.HttpServlet;
 import tomcat.servlet.HttpServletResponse;
+import tomcat.servlet.StaticContentServlet;
 import tomcat.servlet.request.HttpServletRequest;
 import tomcat.servlet_context.ServletContext;
 
@@ -27,6 +28,8 @@ public class RequestDispatcher {
 
     //TODO: if servlet with this url doesn't exist
     private void processPaths() {
+        boolean hasServlet = false;
+
         for (Map.Entry<String, String> patternEntry : context.getServletMappings().entrySet()) {
             String pattern = patternEntry.getValue();
             if (!url.startsWith(pattern)) {
@@ -41,7 +44,12 @@ public class RequestDispatcher {
 
             String servletName = patternEntry.getKey();
             servletClass = context.getServlets().get(servletName);
-            return;
+            hasServlet = true;
+            break;
+        }
+
+        if (!hasServlet) {
+            servletClass = StaticContentServlet.class;
         }
     }
 
