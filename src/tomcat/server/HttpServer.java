@@ -5,6 +5,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.xml.sax.SAXException;
 import tomcat.servlet_context.ServletContext;
+import tomcat.utility.ServerSettings;
 import webapps.blogApp.src.servlets.*;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -65,17 +66,22 @@ public class HttpServer {
             return;
         }
 
+        ServerSettings serverSettings = new ServerSettings();
         String contextPath = arguments.length == 1 ? arguments[0] : DEFAULT_DIRECTORY;
         String optionStr = cmd.getOptionValue("p");
-        int port = optionStr != null ? Integer.parseInt(optionStr) : DEFAULT_PORT;
-        printStart(port, contextPath);
+        serverSettings.port = optionStr != null ? Integer.parseInt(optionStr) : DEFAULT_PORT;
+        printStart(serverSettings.port, contextPath);
 
         optionStr = cmd.getOptionValue("t");
         int poolSize = optionStr != null ? Integer.parseInt(optionStr) : DEFAULT_THREAD_POOL_SIZE;
 
+        serverSettings.listDir = cmd.hasOption("d");
+        serverSettings.returnGzip = cmd.hasOption("g");
+        serverSettings.canCompress = cmd.hasOption("c");
+
         try {
             HttpServer server = new HttpServer(contextPath);
-            server.startServer(port, poolSize);
+            server.startServer(serverSettings.port, poolSize);
         } catch (Exception e) {
             LOGGER.error("Server can't start: error parsing webapp web.xml");
         }
@@ -85,6 +91,9 @@ public class HttpServer {
         Options options = new Options();
         options.addOption("p", "port", true, "порт");
         options.addOption("t", "threads", true, "брой нишки");
+        options.addOption("d", false, "ако ресурса е директория да показва съдържанието");
+        options.addOption("c", "canCompress", false, "създава компресирани версии на текстови файлове");
+        options.addOption("g", "returnGzip", false, "връщане на копресирана версия на файл");
         options.addOption("h", "help", false, "показва описание на опциите");
         return options;
     }

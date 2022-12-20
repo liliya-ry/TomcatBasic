@@ -2,13 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4c31ff75-3936-4468-834e-8e5307d081ed" name="Changes" comment="update">
-      <change afterPath="$PROJECT_DIR$/src/tomcat/servlet/StaticContentServlet.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/tomcat/utility/GzipCompressor.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/tomcat/utility/HtmlWriter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/index.pb" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/index.pb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/tomcat/servlet/HttpServletResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/tomcat/servlet/HttpServletResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/tomcat/servlet/request/RequestDispatcher.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/tomcat/servlet/request/RequestDispatcher.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/tomcat/utility/ServerSettings.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/tomcat/server/HttpServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/tomcat/server/HttpServer.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -224,7 +219,14 @@
       <option name="project" value="LOCAL" />
       <updated>1671478751012</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="update">
+      <created>1671521274777</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1671521274777</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
