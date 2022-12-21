@@ -7,16 +7,17 @@ import tomcat.servlet.*;
 import tomcat.utility.StatusCode;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.Map;
 
 public class HttpServerTask implements Runnable {
     private static final Logger LOGGER = LogManager.getLogger(HttpServerTask.class);
 
     private final Socket clientSocket;
-    private final ServletContext servletContext;
+    private final Map<String, ServletContext> servletContexts;
 
-    HttpServerTask(Socket clientSocket, ServletContext servletContext) {
+    HttpServerTask(Socket clientSocket, Map<String, ServletContext> servletContexts) {
         this.clientSocket = clientSocket;
-        this.servletContext = servletContext;
+        this.servletContexts = servletContexts;
     }
 
     @Override
@@ -38,7 +39,7 @@ public class HttpServerTask implements Runnable {
     private HttpServletRequest getRequest() throws IOException {
         HttpServletRequest request = null;
         try {
-            request = new HttpServletRequest(clientSocket, servletContext);
+            request = new HttpServletRequest(clientSocket, servletContexts);
         } catch (IOException e) {
             sendBadRequestResponse();
             return null;

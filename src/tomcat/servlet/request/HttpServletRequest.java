@@ -11,12 +11,13 @@ public class HttpServletRequest {
 
     private final Map<String, String> headers = new HashMap<>();
     private final Map<String, String> parameters = new HashMap<>();
-    private final ServletContext context;
+    private final Map<String, ServletContext> servletContexts;
     private final RequestDispatcher dispatcher;
     private String protocol;
     private String method;
     private String body = null;
     private String requestURI;
+    private String contextPath;
     private String afterContextPath;
     private BufferedReader reader;
 
@@ -26,14 +27,14 @@ public class HttpServletRequest {
         VALID_METHODS = Set.of("GET", "POST", "PUT", "DELETE");
     }
 
-    public HttpServletRequest(Socket clientSocket, ServletContext context) throws IOException {
-        this.context = context;
+    public HttpServletRequest(Socket clientSocket, Map<String, ServletContext> servletContexts) throws IOException {
+        this.servletContexts = servletContexts;
         setReader(clientSocket);
         readFirstLine();
         readHeaders();
         setHost();
         readBody();
-        dispatcher = new RequestDispatcher(context, afterContextPath);
+        dispatcher = new RequestDispatcher(servletContexts.get(contextPath), afterContextPath);
     }
 
     private void setReader(Socket clientSocket) throws IOException {
@@ -96,7 +97,8 @@ public class HttpServletRequest {
     private void readParameters(String path) {
         String[] pathParts = path.split("\\?");
         requestURI = pathParts[0];
-        int startIndex = context.getContextPath().length();
+        findContextPath();
+        int startIndex = contextPath.length();
         afterContextPath = requestURI.substring(startIndex);
 
         if (pathParts.length != 2) {
@@ -112,12 +114,21 @@ public class HttpServletRequest {
         }
     }
 
+    private void findContextPath() {
+        for (String path : servletContexts.keySet()) {
+            if (requestURI.startsWith(path)) {
+                contextPath = path;
+                return;
+            }
+        }
+    }
+
     public String getHeader(String name) {
         return headers.get(name);
     }
 
     public String getContextPath() {
-        return context.getContextPath();
+        return contextPath;
     }
 
     public String getPathInfo() {
@@ -150,7 +161,7 @@ public class HttpServletRequest {
     }
 
     public RequestDispatcher getRequestDispatcher(String s) {
-        return new RequestDispatcher(context, s);
+        return new RequestDispatcher(servletContexts.get(contextPath), s);
     }
 
     public RequestDispatcher getRequestDispatcher() {

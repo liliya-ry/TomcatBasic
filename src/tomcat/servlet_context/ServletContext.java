@@ -7,8 +7,11 @@ import java.io.IOException;
 import java.util.*;
 
 public class ServletContext {
+
+    private static final String WEB_XML_URL = "/main/webapp/WEB-INF/web.xml";
     private static final List<String> VALID_TAGS = List.of("filter", "filter-mapping", "servlet", "servlet-mapping");
     private static final Set<String> ORDERED_VALID_TAGS;
+
     Map<String, Class<?>> filters = new LinkedHashMap<>(); //key - filter name, value - filter type
     Map<String, FilterRegistration> filterRegistrations; // key - filter name, value - filter mapping
     Map<String, Class<?>> servlets = new LinkedHashMap<>(); //key - servlet name, value - servlet type
@@ -23,11 +26,11 @@ public class ServletContext {
 
     }
 
-    public ServletContext(String webAppDir, String contextPath, String webXmlUrl) throws ParserConfigurationException, IOException, SAXException {
+    public ServletContext(String webAppDir, String contextPath) throws ParserConfigurationException, IOException, SAXException {
         this.webAppDir = webAppDir;
         this.contextPath = contextPath;
-        this.webAppDirFromRoot = webAppDir.substring(4).replaceAll("/", ".");
-        parseWebXML(webAppDir + "/" + webXmlUrl);
+        this.webAppDirFromRoot = webAppDir.substring(4).replace("/", ".");
+        parseWebXML(webAppDir + "/" + WEB_XML_URL);
     }
 
     private void parseWebXML(String webXmlPath) throws ParserConfigurationException, IOException, SAXException {
@@ -191,5 +194,9 @@ public class ServletContext {
 
     public Map<String, FilterRegistration> getFilterRegistrations() {
         return filterRegistrations;
+    }
+
+    public String getWebAppDir() {
+        return webAppDir;
     }
 }

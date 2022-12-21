@@ -7,9 +7,11 @@ import static tomcat.servlet.HttpServletResponse.SC_NOT_IMPLEMENTED;
 import java.io.IOException;
 
 public abstract class HttpServlet {
-    protected HttpServlet() {}
+    protected HttpServlet() {
+        init();
+    }
 
-    public void init() {}
+    protected void init() {}
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.sendError(SC_NOT_IMPLEMENTED);

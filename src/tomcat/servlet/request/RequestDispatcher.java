@@ -1,8 +1,8 @@
 package tomcat.servlet.request;
 
+import tomcat.server.StaticContentServlet;
 import tomcat.servlet.HttpServlet;
 import tomcat.servlet.HttpServletResponse;
-import tomcat.servlet.StaticContentServlet;
 import tomcat.servlet.request.HttpServletRequest;
 import tomcat.servlet_context.ServletContext;
 
@@ -13,9 +13,9 @@ import java.util.Map;
 
 public class RequestDispatcher {
     Map<Class<?>, HttpServlet> servlets = new HashMap<>();
-    private ServletContext context;
+    private final ServletContext context;
+    private final String url;
     private Class<?> servletClass;
-    private String url;
     String servletPath;
     String pathInfo;
 
@@ -26,7 +26,6 @@ public class RequestDispatcher {
         processPaths();
     }
 
-    //TODO: if servlet with this url doesn't exist
     private void processPaths() {
         boolean hasServlet = false;
 
@@ -57,14 +56,17 @@ public class RequestDispatcher {
         HttpServlet servlet = servlets.get(servletClass);
         if (servlet == null) {
             try {
-                servlet = (HttpServlet) servletClass.getDeclaredConstructor().newInstance();
-                servlet.init();
-                servlets.put(servletClass, servlet);
+                if (servletClass.equals(StaticContentServlet.class)) {
+                    servlet = new StaticContentServlet(context);
+                } else {
+                    servlet = (HttpServlet) servletClass.getDeclaredConstructor().newInstance();
+                }
             } catch (Exception e) {
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST); //change error type
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST);
                 return;
             }
         }
+        servlets.put(servletClass, servlet);
         servlet.service(request, response);
     }
 

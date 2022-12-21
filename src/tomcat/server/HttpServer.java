@@ -1,33 +1,34 @@
 package tomcat.server;
 
 import org.apache.commons.cli.*;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 import tomcat.servlet_context.ServletContext;
-import tomcat.utility.ServerSettings;
-import webapps.blogApp.src.servlets.*;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.net.*;
 import java.net.Socket;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.*;
 
 public class HttpServer {
-    private static final Logger LOGGER = LogManager.getLogger(HttpServer.class);
-    private static final String WEB_APP_DIR = "src/webapps/blogApp/src";
-    private static final String WEB_XML_URL = "/main/webapp/WEB-INF/web.xml";
+    private static final String SERVER_XML_PATH = "src/tomcat/server.xml";
     private static final int DEFAULT_PORT = 80;
     private static final int DEFAULT_THREAD_POOL_SIZE = 1;
-    private static final String DEFAULT_DIRECTORY = "/blogApp";
 
-    private final ServletContext servletContext;
+    private final Map<String, ServletContext> servletContexts;
 
 
-    private HttpServer(String contextPath) throws Exception {
-        this.servletContext = new ServletContext(WEB_APP_DIR, contextPath, WEB_XML_URL);
+    private HttpServer() throws Exception {
+        servletContexts = new HashMap<>();
+        parseServletContexts();
     }
 
     private void startServer(int port, int poolSize) {
@@ -36,15 +37,15 @@ public class HttpServer {
         try (ServerSocket serverSocket = new ServerSocket(port)) {
             while (true) {
                 Socket clientSocket = serverSocket.accept();
-                HttpServerTask serverTask = new HttpServerTask(clientSocket, servletContext);
+                HttpServerTask serverTask = new HttpServerTask(clientSocket, servletContexts);
                 pool.submit(serverTask);
             }
         } catch (IOException e) {
-            LOGGER.error(e.getMessage());
+            System.out.println(e.getMessage());
         }
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         if (args == null) {
             printUsage();
             return;
@@ -66,24 +67,19 @@ public class HttpServer {
             return;
         }
 
-        ServerSettings serverSettings = new ServerSettings();
-        String contextPath = arguments.length == 1 ? arguments[0] : DEFAULT_DIRECTORY;
+        HttpServer server = new HttpServer();
         String optionStr = cmd.getOptionValue("p");
-        serverSettings.port = optionStr != null ? Integer.parseInt(optionStr) : DEFAULT_PORT;
-        printStart(serverSettings.port, contextPath);
+        int port = optionStr != null ? Integer.parseInt(optionStr) : DEFAULT_PORT;
+        printStart(port);
 
         optionStr = cmd.getOptionValue("t");
         int poolSize = optionStr != null ? Integer.parseInt(optionStr) : DEFAULT_THREAD_POOL_SIZE;
 
-        serverSettings.listDir = cmd.hasOption("d");
-        serverSettings.returnGzip = cmd.hasOption("g");
-        serverSettings.canCompress = cmd.hasOption("c");
-
         try {
-            HttpServer server = new HttpServer(contextPath);
-            server.startServer(serverSettings.port, poolSize);
+
+            server.startServer(port, poolSize);
         } catch (Exception e) {
-            LOGGER.error("Server can't start: error parsing webapp web.xml");
+            System.out.println("Server can't start: error parsing webapp web.xml");
         }
     }
 
@@ -91,9 +87,6 @@ public class HttpServer {
         Options options = new Options();
         options.addOption("p", "port", true, "порт");
         options.addOption("t", "threads", true, "брой нишки");
-        options.addOption("d", false, "ако ресурса е директория да показва съдържанието");
-        options.addOption("c", "canCompress", false, "създава компресирани версии на текстови файлове");
-        options.addOption("g", "returnGzip", false, "връщане на копресирана версия на файл");
         options.addOption("h", "help", false, "показва описание на опциите");
         return options;
     }
@@ -112,12 +105,23 @@ public class HttpServer {
         System.out.println("Usage: http-server [path] [options]");
     }
 
-    private static void printStart(int port, String contextPath) {
-        System.out.println("Starting up http-server, serving " + contextPath);
-        System.out.println("Available on:");
-        System.out.println("  http://192.168.8.151:" + port + contextPath);
-        System.out.println("  http://127.0.0.1:" + port + contextPath);
-        System.out.println("  http://localhost:" + port + contextPath);
+    private static void printStart(int port) {
+        System.out.println("  http://localhost:" + port);
         System.out.println("Hit CTRL-C to stop the server");
+    }
+
+    public void parseServletContexts() throws ParserConfigurationException, IOException, SAXException {
+        DocumentBuilder docBuilder = DocumentBuilderFactory.newDefaultInstance().newDocumentBuilder();
+        Document document = docBuilder.parse(SERVER_XML_PATH);
+        NodeList contextNodes = document.getElementsByTagName("Context");
+        for (int i = 0; i < contextNodes.getLength(); i++) {
+            Node contextNode = contextNodes.item(i);
+            Element contextEl = (Element) contextNode;
+            String path = "/" + contextEl.getAttribute("path");
+            String docBase = contextEl.getAttribute("docBase");
+            ServletContext context = new ServletContext(docBase, path);
+            servletContexts.put(path, context);
+        }
+
     }
 }

@@ -21,7 +21,7 @@ public class HttpServletResponse {
     private int status = SC_OK;
     private String contentType = DEFAULT_CONTENT_TYPE;
     private final PrintWriter writer;
-    private final Socket clientSocket;
+    private Socket clientSocket;
 
     public HttpServletResponse(Socket clientSocket, String protocol) throws IOException {
         OutputStream clientOS = clientSocket.getOutputStream();
@@ -55,9 +55,9 @@ public class HttpServletResponse {
         this.contentType = contentType;
     }
 
-    void sendResponse(Path filePath) throws IOException {
+    public void sendResponse(Path filePath) throws IOException {
         OutputStream clientOutput = clientSocket.getOutputStream();
-        clientOutput.write((protocol + "\r\n" + status).getBytes());
+        clientOutput.write((protocol + " " + status + "\r\n").getBytes());
 
         File f = filePath.toFile();
         clientOutput.write(("Content-Length: " + f.length() + "\r\n").getBytes());
