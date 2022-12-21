@@ -40,7 +40,7 @@ public class HttpServletRequest {
     private void setReader(Socket clientSocket) throws IOException {
         InputStream clientInputStream = clientSocket.getInputStream();
         var in = new InputStreamReader(clientInputStream);
-        reader =  new BufferedReader(in);
+        reader = new BufferedReader(in);
     }
 
     private void readFirstLine() throws IOException {
@@ -94,10 +94,13 @@ public class HttpServletRequest {
         }
     }
 
-    private void readParameters(String path) {
+    private void readParameters(String path) throws IOException {
         String[] pathParts = path.split("\\?");
         requestURI = pathParts[0];
-        findContextPath();
+        contextPath = findContextPath();
+        if (contextPath == null) {
+            throw new IOException("No context for url : " + requestURI);
+        }
         int startIndex = contextPath.length();
         afterContextPath = requestURI.substring(startIndex);
 
@@ -114,13 +117,13 @@ public class HttpServletRequest {
         }
     }
 
-    private void findContextPath() {
+    private String findContextPath() {
         for (String path : servletContexts.keySet()) {
             if (requestURI.startsWith(path)) {
-                contextPath = path;
-                return;
+                return path;
             }
         }
+        return null;
     }
 
     public String getHeader(String name) {
@@ -167,5 +170,4 @@ public class HttpServletRequest {
     public RequestDispatcher getRequestDispatcher() {
         return dispatcher;
     }
-
 }

@@ -26,14 +26,14 @@ public class ServletContext {
 
     }
 
-    public ServletContext(String webAppDir, String contextPath) throws ParserConfigurationException, IOException, SAXException {
+    public ServletContext(String webAppDir, String contextPath) throws IOException, ParserConfigurationException, SAXException {
         this.webAppDir = webAppDir;
         this.contextPath = contextPath;
         this.webAppDirFromRoot = webAppDir.substring(4).replace("/", ".");
         parseWebXML(webAppDir + "/" + WEB_XML_URL);
     }
 
-    private void parseWebXML(String webXmlPath) throws ParserConfigurationException, IOException, SAXException {
+    private void parseWebXML(String webXmlPath) throws IOException, ParserConfigurationException, SAXException {
         DocumentBuilder docBuilder = DocumentBuilderFactory.newDefaultInstance().newDocumentBuilder();
         Document document = docBuilder.parse(webXmlPath);
         invalidateWebXML(document);

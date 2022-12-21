@@ -42,9 +42,10 @@ public class HttpServletResponse {
         writer.flush();
     }
 
-    public void sendError(int status) {
+    public void sendError(int status) throws IOException {
         this.status = status;
         printHeaders();
+        clientSocket.close();
     }
 
     public void setStatus(int status) {

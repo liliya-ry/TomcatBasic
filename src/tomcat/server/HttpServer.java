@@ -1,21 +1,13 @@
 package tomcat.server;
 
 import org.apache.commons.cli.*;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
+import org.w3c.dom.*;
 import org.xml.sax.SAXException;
 import tomcat.servlet_context.ServletContext;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.*;
 import java.io.IOException;
 import java.net.*;
-import java.net.Socket;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.*;
 
 public class HttpServer {
@@ -26,9 +18,13 @@ public class HttpServer {
     private final Map<String, ServletContext> servletContexts;
 
 
-    private HttpServer() throws Exception {
+    private HttpServer() {
         servletContexts = new HashMap<>();
-        parseServletContexts();
+        try {
+            parseServletContexts();
+        } catch (Exception e) {
+            System.out.println("Error parsing Servlet Contexts - server can not start");
+        }
     }
 
     private void startServer(int port, int poolSize) {
@@ -45,7 +41,7 @@ public class HttpServer {
         }
     }
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         if (args == null) {
             printUsage();
             return;
@@ -76,7 +72,6 @@ public class HttpServer {
         int poolSize = optionStr != null ? Integer.parseInt(optionStr) : DEFAULT_THREAD_POOL_SIZE;
 
         try {
-
             server.startServer(port, poolSize);
         } catch (Exception e) {
             System.out.println("Server can't start: error parsing webapp web.xml");
@@ -110,7 +105,7 @@ public class HttpServer {
         System.out.println("Hit CTRL-C to stop the server");
     }
 
-    public void parseServletContexts() throws ParserConfigurationException, IOException, SAXException {
+    public void parseServletContexts() throws IOException, SAXException, ParserConfigurationException {
         DocumentBuilder docBuilder = DocumentBuilderFactory.newDefaultInstance().newDocumentBuilder();
         Document document = docBuilder.parse(SERVER_XML_PATH);
         NodeList contextNodes = document.getElementsByTagName("Context");

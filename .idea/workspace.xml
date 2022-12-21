@@ -2,21 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4c31ff75-3936-4468-834e-8e5307d081ed" name="Changes" comment="update">
-      <change afterPath="$PROJECT_DIR$/src/tomcat/server.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/tomcat/server/StaticContentServlet.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/webapps/blogApp/src/index.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/tomcat/utility/HtmlWriter.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/webapps/blogApp/src/folder/Slide15.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/tomcat/server/HttpServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/tomcat/server/HttpServer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/tomcat/server/HttpServerTask.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/tomcat/server/HttpServerTask.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/tomcat/servlet/HttpServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/tomcat/servlet/HttpServlet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/tomcat/server/StaticContentServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/tomcat/server/StaticContentServlet.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/tomcat/servlet/HttpServletResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/tomcat/servlet/HttpServletResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/tomcat/servlet/StaticContentServlet.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/tomcat/servlet/request/HttpServletRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/tomcat/servlet/request/HttpServletRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/tomcat/servlet/request/RequestDispatcher.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/tomcat/servlet/request/RequestDispatcher.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/tomcat/servlet_context/ServletContext.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/tomcat/servlet_context/ServletContext.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/tomcat/utility/GzipCompressor.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/tomcat/utility/HtmlWriter.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/tomcat/utility/ServerSettings.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/webapp/index.html" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -48,7 +42,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "SONARLINT_PRECOMMIT_ANALYSIS": "true",
-    "last_opened_file_path": "D:/IdeaProjects/TomcatBasic/src/webapps/blogApp/src",
+    "last_opened_file_path": "D:/IdeaProjects/TomcatBasic/src/webapps/blogApp/src/folder",
     "project.structure.last.edited": "Global Libraries",
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.2",
@@ -57,11 +51,11 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\IdeaProjects\TomcatBasic\src\webapps\blogApp\src\folder" />
       <recent name="D:\IdeaProjects\TomcatBasic\src\webapps\blogApp\src" />
       <recent name="D:\IdeaProjects\TomcatBasic\src\webapps\blogApp\src\resources" />
       <recent name="D:\IdeaProjects\TomcatBasic\src\webapps\blogApp\resources" />
       <recent name="D:\IdeaProjects\TomcatBasic\src\utility" />
-      <recent name="D:\IdeaProjects\TomcatBasic\src\model" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="D:\IdeaProjects\TomcatBasic\src\webapp" />
@@ -261,7 +255,14 @@
       <option name="project" value="LOCAL" />
       <updated>1671521918131</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="update">
+      <created>1671605132937</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1671605132937</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
