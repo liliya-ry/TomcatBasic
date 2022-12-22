@@ -9,8 +9,6 @@ a
 1src/webapps/blogApp/src/mappers/CommentMapper.xml,c\b\cb5bf0594ccd38411e0cfd230fbc75435ac47dd2
 b
 2src/webapps/blogApp/src/utility/ErrorResponse.java,d\6\d647c7974e9b2f1c8a5d9180d1d24c89b9f3ddc7
-E
-src/webapp/index.html,0\c\0cc4925ffd876dc10110f64fc429bb483fc38f18
 f
 6src/webapps/blogApp/src/utility/PasswordEncryptor.java,b\5\b5a42f3f60d28188656615c39b7c3f34ea72fc05
 W
@@ -31,7 +29,5 @@ b
 2src/webapps/blogApp/src/servlets/PostsServlet.java,f\4\f498da9daf188a64e1e7b03863288d3bdbb4b2ac
 c
 3src/webapps/blogApp/src/main/webapp/WEB-INF/web.xml,3\c\3c7643c3610e4f2bba5cfa15127a28cadfa80c02
-b
-2src/tomcat/servlet_context/FilterRegistration.java,f\d\fdd30ee69d867a40f279a44c49c34f08d907514b
 e
 5src/webapps/blogApp/src/servlets/CommentsServlet.java,4\4\444f5cc4b11cc399c6a4bb7f2c967500cbc521b1

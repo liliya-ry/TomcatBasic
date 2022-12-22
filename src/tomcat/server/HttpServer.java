@@ -11,6 +11,7 @@ import java.util.*;
 import java.util.concurrent.*;
 
 public class HttpServer {
+    private static final String TOMCAT_ROOT = "D:/IdeaProjects/TomcatBasic";
     private static final String SERVER_XML_PATH = "src/tomcat/server.xml";
     private static final int DEFAULT_PORT = 80;
     private static final int DEFAULT_THREAD_POOL_SIZE = 1;
@@ -114,6 +115,10 @@ public class HttpServer {
             Element contextEl = (Element) contextNode;
             String path = "/" + contextEl.getAttribute("path");
             String docBase = contextEl.getAttribute("docBase");
+            if (docBase == null || docBase.isEmpty() || !docBase.startsWith(TOMCAT_ROOT)) {
+                throw new IOException("Invalid docBase " + docBase);
+            }
+            docBase = docBase.substring(TOMCAT_ROOT.length() + 1);
             ServletContext context = new ServletContext(docBase, path);
             servletContexts.put(path, context);
         }

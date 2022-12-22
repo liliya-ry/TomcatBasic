@@ -1,16 +1,15 @@
 package tomcat.server;
 
-import org.apache.logging.log4j.*;
 import tomcat.servlet.request.*;
 import tomcat.servlet_context.ServletContext;
 import tomcat.servlet.*;
-import tomcat.utility.StatusCode;
+import tomcat.utility.*;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.Map;
 
 public class HttpServerTask implements Runnable {
-    private static final Logger LOGGER = LogManager.getLogger(HttpServerTask.class);
+    private static final LoggingHandler LOGGING_HANDLER = new LoggingHandler(HttpServerTask.class);
 
     private final Socket clientSocket;
     private final Map<String, ServletContext> servletContexts;
@@ -27,12 +26,12 @@ public class HttpServerTask implements Runnable {
             if (request == null) {
                 return;
             }
-            logRequest(request);
+            LOGGING_HANDLER.logRequest(request);
             HttpServletResponse response = new HttpServletResponse(clientSocket, request.getProtocol());
             RequestDispatcher requestDispatcher = request.getRequestDispatcher();
             requestDispatcher.forward(request, response);
         } catch (IOException e) {
-            LOGGER.error("Could not send response");
+            System.out.println("Could not send response");
         }
     }
 
@@ -47,20 +46,9 @@ public class HttpServerTask implements Runnable {
         return request;
     }
 
-    private void logRequest(HttpServletRequest request) {
-        String userAgent = request.getHeader("User-Agent");
-        LOGGER.info("{} {} {}", request.getMethod(), request.getRequestURI(), userAgent);
-    }
-
-    private void logError(HttpServletRequest request, StatusCode statusCode) {
-        String method = request != null ? request.getMethod() : "unknown";
-        String path = request != null ? request.getRequestURI() : "unknown";
-        LOGGER.error("{} {} Error ({}): \"{}\"", method, path, statusCode.code, statusCode.message);
-    }
-
     private void sendBadRequestResponse() throws IOException {
         HttpServletResponse response = new HttpServletResponse(clientSocket, null);
         response.sendError(HttpServletResponse.SC_BAD_REQUEST);
-        logError(null, StatusCode.BAD_REQUEST);
+        LOGGING_HANDLER.logError(null, StatusCode.BAD_REQUEST);
     }
 }

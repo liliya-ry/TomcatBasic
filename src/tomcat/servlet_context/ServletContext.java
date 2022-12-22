@@ -1,179 +1,31 @@
 package tomcat.servlet_context;
 
-import org.w3c.dom.*;
 import org.xml.sax.SAXException;
+import tomcat.server.StaticContentServlet;
+import tomcat.servlet.HttpServlet;
+import tomcat.servlet.request.RequestDispatcher;
+
 import javax.xml.parsers.*;
-import java.io.IOException;
+import java.io.*;
+import java.lang.reflect.InvocationTargetException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.*;
 
 public class ServletContext {
-
-    private static final String WEB_XML_URL = "/main/webapp/WEB-INF/web.xml";
-    private static final List<String> VALID_TAGS = List.of("filter", "filter-mapping", "servlet", "servlet-mapping");
-    private static final Set<String> ORDERED_VALID_TAGS;
-
-    Map<String, Class<?>> filters = new LinkedHashMap<>(); //key - filter name, value - filter type
-    Map<String, FilterRegistration> filterRegistrations; // key - filter name, value - filter mapping
-    Map<String, Class<?>> servlets = new LinkedHashMap<>(); //key - servlet name, value - servlet type
-    Map<String, String> servletMappings = new LinkedHashMap<>(); //key = servlet name, value - url-pattern
+    private Map<String, Class<?>> filters = new LinkedHashMap<>(); //key - filter name, value - filter type
+    private Map<String, FilterRegistration> filterRegistrations; // key - filter name, value - filter mapping
+    private Map<String, Class<?>> servlets = new LinkedHashMap<>(); //key - servlet name, value - servlet type
+    private Map<String, String> servletMappings = new LinkedHashMap<>(); //key = servlet name, value - url-pattern
+    private Map<String, RequestDispatcher> dispatchers = new HashMap<>();
     String contextPath;
-    String webAppDir;
-    String webAppDirFromRoot;
-
-    static {
-        ORDERED_VALID_TAGS = new LinkedHashSet<>();
-        ORDERED_VALID_TAGS.addAll(VALID_TAGS);
-
-    }
+    String webRoot;
 
     public ServletContext(String webAppDir, String contextPath) throws IOException, ParserConfigurationException, SAXException {
-        this.webAppDir = webAppDir;
+        this.webRoot = webAppDir;
         this.contextPath = contextPath;
-        this.webAppDirFromRoot = webAppDir.substring(4).replace("/", ".");
-        parseWebXML(webAppDir + "/" + WEB_XML_URL);
-    }
-
-    private void parseWebXML(String webXmlPath) throws IOException, ParserConfigurationException, SAXException {
-        DocumentBuilder docBuilder = DocumentBuilderFactory.newDefaultInstance().newDocumentBuilder();
-        Document document = docBuilder.parse(webXmlPath);
-        invalidateWebXML(document);
-        invalidateNodes(document);
-        //createFilters(document);
-        createServlets(document);
-        createServletMappings(document);
-        //createFilterMappings(document);
-    }
-
-    private void invalidateWebXML(Document document) throws IOException {
-        NodeList nodeList = document.getChildNodes();
-        if (nodeList.getLength() != 2) {
-            throw new IOException("invalid web.xml");
-        }
-
-        for (int i = 0; i < nodeList.getLength(); i++) {
-            Node node = nodeList.item(i);
-            if (!node.getNodeName().equals("web-app")) {
-                throw new IOException("invalid web.xml");
-            }
-        }
-    }
-
-    private void invalidateNodes(Document document) throws IOException {
-        Node webAppNode = document.getElementsByTagName("web-app").item(0);
-        NodeList nodes = webAppNode.getChildNodes();
-        Set<String> nodeNames = new LinkedHashSet<>();
-        for (int i = 0; i < nodes.getLength(); i++) {
-            Node node = nodes.item(i);
-            String nodeName = node.getNodeName();
-            if (!nodeName.equals("#text")) {
-                nodeNames.add(node.getNodeName());
-            }
-        }
-
-        if (!nodeNames.equals(ORDERED_VALID_TAGS)) {
-            throw new IOException("Invalid order of tags: " + nodeNames);
-        }
-    }
-
-    private void createServlets(Document document) throws IOException {
-        Set<String> servletNames = new LinkedHashSet<>();
-        Set<Class<?>> servletClasses = new LinkedHashSet<>();
-        parseServlets(document, servletNames, servletClasses);
-
-        Iterator<String> namesIt = servletNames.iterator();
-        Iterator<Class<?>> classesIt = servletClasses.iterator();
-        while (namesIt.hasNext() && classesIt.hasNext()) {
-            servlets.put(namesIt.next(), classesIt.next());
-        }
-    }
-
-    private void parseServlets(Document document, Set<String> servletNames, Set<Class<?>> servletClasses) throws IOException {
-        NodeList servletNodes = document.getElementsByTagName("servlet");
-        for (int i = 0; i < servletNodes.getLength(); i++) {
-            Node servletNode = servletNodes.item(i);
-            NodeList servletAttr = servletNode.getChildNodes();
-            for (int j = 0; j < servletAttr.getLength(); j++) {
-                Node attrNode = servletAttr.item(j);
-
-                if (attrNode instanceof Text) {
-                    continue;
-                }
-
-                String attrName = attrNode.getNodeName();
-                switch (attrName) {
-                    case "servlet-name" -> addServletName(attrNode, servletNames);
-                    case "servlet-class" -> addServletClass(attrNode, servletClasses);
-                    default -> throw new IOException("Invalid node: " + attrName);
-                }
-            }
-        }
-    }
-
-    private void addServletName(Node attrNode, Set<String> names) throws IOException {
-        String servletName = attrNode.getTextContent();
-        if (!names.add(servletName)) {
-            throw new IOException("Servlet with this name already exists: " + servletName);
-        }
-    }
-
-    private void addServletClass(Node attrNode, Set<Class<?>> classes) throws IOException {
-        String servletClassName = attrNode.getTextContent();
-        servletClassName = webAppDirFromRoot + "." + servletClassName;
-        try {
-            Class<?> servletClass = Class.forName(servletClassName);
-            if (!classes.add(servletClass)) {
-                throw new IOException("Class already exists: " + servletClass);
-            }
-        } catch (ClassNotFoundException e) {
-            throw new IOException("Class not found: " + servletClassName);
-        }
-    }
-
-    private void createServletMappings(Document document) throws IOException {
-        List<String> servletNames = new ArrayList<>();
-        List<String> urlPatterns = new ArrayList<>();
-        parseServletMappings(document, servletNames, urlPatterns);
-
-        for (int i = 0; i < servletNames.size(); i++) {
-            String servletName = servletNames.get(i);
-            String urlPattern = urlPatterns.get(i);
-            servletMappings.put(servletName, urlPattern);
-        }
-    }
-
-    private void parseServletMappings(Document document, List<String> servletNames, List<String> urlPatterns) throws IOException {
-        NodeList servletNodes = document.getElementsByTagName("servlet-mapping");
-        for (int i = 0; i < servletNodes.getLength(); i++) {
-            Node servletNode = servletNodes.item(i);
-            NodeList servletAttr = servletNode.getChildNodes();
-            for (int j = 0; j < servletAttr.getLength(); j++) {
-                Node attrNode = servletAttr.item(j);
-
-                if (attrNode instanceof Text) {
-                    continue;
-                }
-
-                String attrName = attrNode.getNodeName();
-                switch (attrName) {
-                    case "servlet-name" -> addServletNameInMapping(attrNode, servletNames);
-                    case "url-pattern" -> addUrlPattern(attrNode, urlPatterns);
-                    default -> throw new IOException("Invalid node: " + attrName);
-                }
-            }
-        }
-    }
-
-    private void addUrlPattern(Node attrNode, List<String> urlPatterns) {
-        String urlPattern = attrNode.getTextContent();
-        urlPatterns.add(urlPattern);
-    }
-
-    private void addServletNameInMapping(Node attrNode, List<String> servletNames) throws IOException {
-        String servletName = attrNode.getTextContent();
-        if (!servlets.containsKey(servletName)) {
-            throw new IOException("Servlet with this name doesn't exists: " + servletName);
-        }
-        servletNames.add(servletName);
+        WebXmlParser xmlParser = new WebXmlParser(this);
+        xmlParser.parseWebXML();
     }
 
     public String getContextPath() {
@@ -196,7 +48,76 @@ public class ServletContext {
         return filterRegistrations;
     }
 
-    public String getWebAppDir() {
-        return webAppDir;
+    public String getWebRoot() {
+        return webRoot;
     }
+
+    void addServlet(String servletName, Class<?> servletClass) {
+        servlets.put(servletName, servletClass);
+    }
+
+    void addServletMapping(String servletName, String url) {
+        servletMappings.put(servletName, url);
+    }
+
+    public URL getResource(String path) throws MalformedURLException {
+        File f = new File(path);
+        if (!f.exists()) {
+            return null;
+        }
+
+        String p = path.substring(webRoot.length());
+        p = contextPath + p.replace("\\", "/");
+        String urlStr = "http://localhost:8081" + p;
+        return new URL(urlStr);
+    }
+
+    public InputStream getResourceAsStream(String path) {
+        try {
+             return new FileInputStream(path);
+        } catch (FileNotFoundException e) {
+            return null;
+        }
+    }
+    
+    public RequestDispatcher getRequestDispatcher(String path) {
+        RequestDispatcher dispatcher = dispatchers.get(path);
+        if (dispatcher == null) {
+            dispatcher = createDispatcher(path);
+        }
+        return dispatcher;
+    }
+
+    private RequestDispatcher createDispatcher(String path) {
+        String servletPath = null;
+        String pathInfo = null;
+
+        for (Map.Entry<String, String> patternEntry : servletMappings.entrySet()) {
+            String pattern = patternEntry.getValue();
+            if (!path.startsWith(pattern)) {
+                continue;
+            }
+
+            servletPath = pattern;
+            pathInfo = path.substring(pattern.length());
+            if (pathInfo.isEmpty() || pathInfo.startsWith("/?")) {
+                pathInfo = "/";
+            }
+
+            String servletName = patternEntry.getKey();
+            Class<?> servletClass = servlets.get(servletName);
+            HttpServlet servlet = null;
+            try {
+                servlet = (HttpServlet) servletClass.getDeclaredConstructor().newInstance();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+            return new RequestDispatcher(servlet, servletPath, pathInfo);
+        }
+
+        HttpServlet servlet = new StaticContentServlet(this);
+        return new RequestDispatcher(servlet, servletPath, pathInfo);
+    }
+    
+    
 }

@@ -34,7 +34,8 @@ public class HttpServletRequest {
         readHeaders();
         setHost();
         readBody();
-        dispatcher = new RequestDispatcher(servletContexts.get(contextPath), afterContextPath);
+        ServletContext context = servletContexts.get(contextPath);
+        dispatcher = context.getRequestDispatcher(afterContextPath);
     }
 
     private void setReader(Socket clientSocket) throws IOException {
@@ -164,7 +165,8 @@ public class HttpServletRequest {
     }
 
     public RequestDispatcher getRequestDispatcher(String s) {
-        return new RequestDispatcher(servletContexts.get(contextPath), s);
+        ServletContext context = servletContexts.get(contextPath);
+        return context.getRequestDispatcher(s);
     }
 
     public RequestDispatcher getRequestDispatcher() {

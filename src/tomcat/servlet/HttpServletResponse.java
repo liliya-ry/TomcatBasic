@@ -2,10 +2,9 @@ package tomcat.servlet;
 
 import java.io.*;
 import java.net.Socket;
-import java.nio.file.Files;
-import java.nio.file.Path;
+import java.nio.file.*;
 import java.time.Instant;
-import java.util.Date;;
+import java.util.Date;
 
 public class HttpServletResponse {
     private static final String DEFAULT_PROTOCOL = "HTTP/1.0";
@@ -18,10 +17,10 @@ public class HttpServletResponse {
                             SC_NOT_IMPLEMENTED = 501;
 
     private final String protocol;
+    private final PrintWriter writer;
+    private final Socket clientSocket;
     private int status = SC_OK;
     private String contentType = DEFAULT_CONTENT_TYPE;
-    private final PrintWriter writer;
-    private Socket clientSocket;
 
     public HttpServletResponse(Socket clientSocket, String protocol) throws IOException {
         OutputStream clientOS = clientSocket.getOutputStream();
@@ -61,19 +60,20 @@ public class HttpServletResponse {
         clientOutput.write((protocol + " " + status + "\r\n").getBytes());
 
         File f = filePath.toFile();
-        clientOutput.write(("Content-Length: " + f.length() + "\r\n").getBytes());
-        clientOutput.write(("Last-Modified: " + new Date(f.lastModified()) + "\r\n").getBytes());
-        clientOutput.write(("Date: " + Date.from(Instant.now()) + "\r\n").getBytes());
+        writeHeader(clientOutput, "Content-Length", String.valueOf(f.length()));
+        writeHeader(clientOutput, "Last-Modified", new Date(f.lastModified()).toString());
+        writeHeader(clientOutput, "Date", Date.from(Instant.now()).toString());
 
         String content = filePath.toString();
         if (content.endsWith(".gz")) {
-            clientOutput.write(("Content-Encoding: gzip\r\n").getBytes());
+            writeHeader(clientOutput, "Content-Encoding", "gzip");
             String originalFile = content.substring(0, content.length() - 3);
             filePath = Path.of(originalFile);
         }
 
-        String contentType = Files.probeContentType(filePath);
-        clientOutput.write(("Content-Type: " + contentType + "\r\n").getBytes());
+        String fileContentType = Files.probeContentType(filePath);
+        writeHeader(clientOutput, "Content-Type", fileContentType);
+
         clientOutput.write("\r\n".getBytes());
         clientOutput.flush();
 
@@ -84,12 +84,15 @@ public class HttpServletResponse {
         clientSocket.close();
     }
 
+    private void writeHeader(OutputStream clientOutput, String headerName, String headerValue) throws IOException {
+        clientOutput.write((headerName + ": " + headerValue + "\r\n").getBytes());
+    }
+
     private void writeContent(OutputStream clientOutput, String content) throws IOException {
         try (var in = new FileInputStream(content);
              var bufferIn = new BufferedInputStream(in)) {
             byte[] buffer = new byte[4 * 1024];
-            int read;
-            while ((read = bufferIn.read(buffer, 0, buffer.length)) != -1) {
+            for (int read; (read = bufferIn.read(buffer, 0, buffer.length)) != -1;) {
                 clientOutput.write(buffer, 0, read);
                 clientOutput.flush();
             }
