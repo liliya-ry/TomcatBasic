@@ -115,8 +115,8 @@ public class HttpServer {
             Element contextEl = (Element) contextNode;
             String path = "/" + contextEl.getAttribute("path");
             String docBase = contextEl.getAttribute("docBase");
-            if (docBase == null || docBase.isEmpty() || !docBase.startsWith(TOMCAT_ROOT)) {
-                throw new IOException("Invalid docBase " + docBase);
+            if (!docBase.startsWith(TOMCAT_ROOT)) {
+                continue;
             }
             docBase = docBase.substring(TOMCAT_ROOT.length() + 1);
             ServletContext context = new ServletContext(docBase, path);

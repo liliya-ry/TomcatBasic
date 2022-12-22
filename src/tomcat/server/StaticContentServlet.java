@@ -5,8 +5,11 @@ import tomcat.servlet.HttpServletResponse;
 import tomcat.servlet.request.HttpServletRequest;
 import tomcat.servlet_context.ServletContext;
 import tomcat.utility.*;
-import java.io.IOException;
+
+import java.io.*;
 import java.nio.file.*;
+import java.time.Instant;
+import java.util.Date;
 
 public class StaticContentServlet extends HttpServlet {
     private static final LoggingHandler LOGGING_HANDLER = new LoggingHandler(StaticContentServlet.class);
@@ -18,7 +21,7 @@ public class StaticContentServlet extends HttpServlet {
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String afterContextStr = request.getRequestURI().substring(request.getContextPath().length() + 1);
+        String afterContextStr = request.getRequestURL().substring(request.getContextPath().length() + 1);
         Path filePath = Paths.get(context.getWebRoot(), afterContextStr);
         if (!Files.exists(filePath)) {
             sendNotFoundResponse(request, response);
@@ -26,11 +29,11 @@ public class StaticContentServlet extends HttpServlet {
         }
 
         if (!Files.isDirectory(filePath)) {
-            response.sendResponse(filePath);
+            sendResponse(response, filePath);
             return;
         }
 
-        sendDirResponse(request, response, filePath);
+        sendDirResponse(response, filePath);
     }
 
     private void sendNotFoundResponse(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -38,22 +41,37 @@ public class StaticContentServlet extends HttpServlet {
         LOGGING_HANDLER.logError(request, StatusCode.NOT_FOUND);
     }
 
-    private void sendDirResponse(HttpServletRequest request, HttpServletResponse response, Path filePath) throws IOException {
+    private void sendDirResponse(HttpServletResponse response, Path filePath) throws IOException {
         Path indexPath = filePath.resolve(INDEX_PATH);
         if (Files.exists(indexPath)) {
-            response.sendResponse(indexPath);
+            sendResponse(response, indexPath);
             return;
         }
-
-//        if (!listDir) {
-//            sendNotFoundResponse(request, response);
-//            return;
-//        }
 
         String dirName = filePath.toString();
         String dirFileName = dirName + ".html";
         Path dirFilePath = Path.of(dirFileName);
         HtmlWriter.createListDirFile(filePath, dirFileName, context.getWebRoot(), context.getContextPath(), 8081);
-        response.sendResponse(dirFilePath);
+        sendResponse(response, dirFilePath);
+    }
+
+    public void sendResponse(HttpServletResponse response, Path filePath) throws IOException {
+        String fileContentType = Files.probeContentType(filePath);
+        response.setHeader("Content-Type", fileContentType);
+
+        OutputStream clientOutput = response.getOutputStream();
+        writeContent(clientOutput, filePath.toString());
+        response.sendResponse();
+    }
+
+    private void writeContent(OutputStream clientOutput, String content) throws IOException {
+        try (var in = new FileInputStream(content);
+             var bufferIn = new BufferedInputStream(in)) {
+            byte[] buffer = new byte[4 * 1024];
+            for (int read; (read = bufferIn.read(buffer, 0, buffer.length)) != -1;) {
+                clientOutput.write(buffer, 0, read);
+                clientOutput.flush();
+            }
+        }
     }
 }

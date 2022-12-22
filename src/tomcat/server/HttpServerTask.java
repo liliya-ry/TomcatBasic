@@ -28,7 +28,8 @@ public class HttpServerTask implements Runnable {
             }
             LOGGING_HANDLER.logRequest(request);
             HttpServletResponse response = new HttpServletResponse(clientSocket, request.getProtocol());
-            RequestDispatcher requestDispatcher = request.getRequestDispatcher();
+            String afterContextPath = request.getRequestURL().substring(request.getContextPath().length());
+            RequestDispatcher requestDispatcher = request.getRequestDispatcher(afterContextPath);
             requestDispatcher.forward(request, response);
         } catch (IOException e) {
             System.out.println("Could not send response");

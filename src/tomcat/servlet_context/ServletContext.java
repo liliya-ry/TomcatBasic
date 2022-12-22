@@ -13,11 +13,11 @@ import java.net.URL;
 import java.util.*;
 
 public class ServletContext {
-    private Map<String, Class<?>> filters = new LinkedHashMap<>(); //key - filter name, value - filter type
+    private final Map<String, Class<?>> filters = new LinkedHashMap<>(); //key - filter name, value - filter type
     private Map<String, FilterRegistration> filterRegistrations; // key - filter name, value - filter mapping
-    private Map<String, Class<?>> servlets = new LinkedHashMap<>(); //key - servlet name, value - servlet type
-    private Map<String, String> servletMappings = new LinkedHashMap<>(); //key = servlet name, value - url-pattern
-    private Map<String, RequestDispatcher> dispatchers = new HashMap<>();
+    private final Map<String, Class<?>> servlets = new LinkedHashMap<>(); //key - servlet name, value - servlet type
+    private final Map<String, String> servletMappings = new HashMap<>(); //key = servlet name, value - url-pattern
+    private final Map<String, RequestDispatcher> dispatchers = new HashMap<>();
     String contextPath;
     String webRoot;
 
@@ -106,7 +106,7 @@ public class ServletContext {
 
             String servletName = patternEntry.getKey();
             Class<?> servletClass = servlets.get(servletName);
-            HttpServlet servlet = null;
+            HttpServlet servlet;
             try {
                 servlet = (HttpServlet) servletClass.getDeclaredConstructor().newInstance();
             } catch (Exception e) {

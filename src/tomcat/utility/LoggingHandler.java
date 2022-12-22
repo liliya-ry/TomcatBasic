@@ -12,12 +12,12 @@ public class LoggingHandler {
 
     public void logRequest(HttpServletRequest request) {
         String userAgent = request.getHeader("User-Agent");
-        logger.info("{} {} {}", request.getMethod(), request.getRequestURI(), userAgent);
+        logger.info("{} {} {}", request.getMethod(), request.getRequestURL(), userAgent);
     }
 
     public void logError(HttpServletRequest request, StatusCode statusCode) {
         String method = request != null ? request.getMethod() : "unknown";
-        String path = request != null ? request.getRequestURI() : "unknown";
+        String path = request != null ? request.getRequestURL() : "unknown";
         logger.error("{} {} Error ({}): \"{}\"", method, path, statusCode.code, statusCode.message);
     }
 }

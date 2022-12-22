@@ -16,7 +16,7 @@ public class HttpServletRequest {
     private String protocol;
     private String method;
     private String body = null;
-    private String requestURI;
+    private String requestURL;
     private String contextPath;
     private String afterContextPath;
     private BufferedReader reader;
@@ -97,13 +97,13 @@ public class HttpServletRequest {
 
     private void readParameters(String path) throws IOException {
         String[] pathParts = path.split("\\?");
-        requestURI = pathParts[0];
+        requestURL = pathParts[0];
         contextPath = findContextPath();
         if (contextPath == null) {
-            throw new IOException("No context for url : " + requestURI);
+            throw new IOException("No context for url : " + requestURL);
         }
         int startIndex = contextPath.length();
-        afterContextPath = requestURI.substring(startIndex);
+        afterContextPath = requestURL.substring(startIndex);
 
         if (pathParts.length != 2) {
             return;
@@ -120,7 +120,7 @@ public class HttpServletRequest {
 
     private String findContextPath() {
         for (String path : servletContexts.keySet()) {
-            if (requestURI.startsWith(path)) {
+            if (requestURL.startsWith(path)) {
                 return path;
             }
         }
@@ -156,8 +156,8 @@ public class HttpServletRequest {
         return method;
     }
 
-    public String getRequestURI() {
-        return requestURI;
+    public String getRequestURL() {
+        return requestURL;
     }
 
     public String getServletPath() {

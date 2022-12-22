@@ -2,17 +2,17 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4c31ff75-3936-4468-834e-8e5307d081ed" name="Changes" comment="update">
-      <change afterPath="$PROJECT_DIR$/src/tomcat/servlet_context/WebXmlParser.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/tomcat/utility/LoggingHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/index.pb" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/index.pb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/tomcat/server.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/tomcat/server.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/tomcat/server/HttpServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/tomcat/server/HttpServer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/tomcat/server/HttpServerTask.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/tomcat/server/HttpServerTask.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/tomcat/server/StaticContentServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/tomcat/server/StaticContentServlet.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/tomcat/servlet/HttpServletResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/tomcat/servlet/HttpServletResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/tomcat/servlet/request/RequestDispatcher.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/tomcat/servlet/request/RequestDispatcher.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/tomcat/servlet/request/HttpServletRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/tomcat/servlet/request/HttpServletRequest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/tomcat/servlet_context/ServletContext.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/tomcat/servlet_context/ServletContext.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/tomcat/servlet_context/WebXmlParser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/tomcat/servlet_context/WebXmlParser.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/tomcat/utility/LoggingHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/tomcat/utility/LoggingHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/webapps/blogApp/src/utility/ResponseHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/webapps/blogApp/src/utility/ResponseHandler.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

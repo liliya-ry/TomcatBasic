@@ -3,8 +3,6 @@ package webapps.blogApp.src.utility;
 import com.google.gson.Gson;
 import org.apache.logging.log4j.*;
 import tomcat.servlet.HttpServletResponse;
-
-import java.io.IOException;
 import java.io.PrintWriter;
 
 public class ResponseHandler {
