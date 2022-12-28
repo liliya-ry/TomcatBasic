@@ -1,19 +1,14 @@
 package tomcat.servlet_context;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.w3c.dom.Text;
+import org.w3c.dom.*;
 import org.xml.sax.SAXException;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.*;
 import java.io.IOException;
 import java.util.*;
 
 public class WebXmlParser {
-    private static final String WEB_XML_URL = "/main/webapp/WEB-INF/web.xml";
+    private static final String WEB_XML_URL = "WEB-INF/web.xml";
     private static final List<String> VALID_TAGS = List.of("filter", "filter-mapping", "servlet", "servlet-mapping");
     private static final Set<String> ORDERED_VALID_TAGS;
 
@@ -24,24 +19,22 @@ public class WebXmlParser {
 
     private final ServletContext servletContext;
     private final String webRoot;
-    private final String webAppDirFromRoot;
 
     public WebXmlParser(ServletContext servletContext) {
         this.servletContext = servletContext;
         this.webRoot = servletContext.webRoot;
-        this.webAppDirFromRoot = webRoot.substring(4).replace("/", ".");
     }
 
-    public void parseWebXML() throws IOException, ParserConfigurationException, SAXException {
-        DocumentBuilder docBuilder = DocumentBuilderFactory.newDefaultInstance().newDocumentBuilder();
-        String fullWebXmlPath = webRoot + "/" + WEB_XML_URL;
-        Document document = docBuilder.parse(fullWebXmlPath);
-        invalidateWebXML(document);
-        invalidateNodes(document);
-        //createFilters(document);
-        createServlets(document);
-        createServletMappings(document);
-        //createFilterMappings(document);
+    public void parseWebXML() throws IOException, ClassNotFoundException, ParserConfigurationException, SAXException {
+            DocumentBuilder docBuilder = DocumentBuilderFactory.newDefaultInstance().newDocumentBuilder();
+            String fullWebXmlPath = webRoot + "/" + WEB_XML_URL;
+            Document document = docBuilder.parse(fullWebXmlPath);
+            invalidateWebXML(document);
+            invalidateNodes(document);
+            createServlets(document);
+            createServletMappings(document);
+            createFilters(document);
+            createFilterMappings(document);
     }
 
     private void invalidateWebXML(Document document) throws IOException {
@@ -75,10 +68,10 @@ public class WebXmlParser {
         }
     }
 
-    private void createServlets(Document document) throws IOException {
+    private void createServlets(Document document) throws IOException, ClassNotFoundException {
         Set<String> servletNames = new LinkedHashSet<>();
         Set<Class<?>> servletClasses = new LinkedHashSet<>();
-        parseServlets(document, servletNames, servletClasses);
+        parseObjects(document, servletNames, servletClasses, "servlet", "servlet-name", "servlet-class");
 
         Iterator<String> namesIt = servletNames.iterator();
         Iterator<Class<?>> classesIt = servletClasses.iterator();
@@ -87,8 +80,20 @@ public class WebXmlParser {
         }
     }
 
-    private void parseServlets(Document document, Set<String> servletNames, Set<Class<?>> servletClasses) throws IOException {
-        NodeList servletNodes = document.getElementsByTagName("servlet");
+    private void createFilters(Document document) throws IOException, ClassNotFoundException {
+        Set<String> filterNames = new LinkedHashSet<>();
+        Set<Class<?>> filterClasses = new LinkedHashSet<>();
+        parseObjects(document, filterNames, filterClasses, "filter", "filter-name", "filter-class");
+
+        Iterator<String> namesIt = filterNames.iterator();
+        Iterator<Class<?>> classesIt = filterClasses.iterator();
+        while (namesIt.hasNext() && classesIt.hasNext()) {
+            servletContext.addFilter(namesIt.next(), classesIt.next());
+        }
+    }
+
+    private void parseObjects(Document document, Set<String> names, Set<Class<?>> classes, String tagName, String nameAttr, String classAttr) throws IOException, ClassNotFoundException {
+        NodeList servletNodes = document.getElementsByTagName(tagName);
         for (int i = 0; i < servletNodes.getLength(); i++) {
             Node servletNode = servletNodes.item(i);
             NodeList servletAttr = servletNode.getChildNodes();
@@ -100,32 +105,37 @@ public class WebXmlParser {
                 }
 
                 String attrName = attrNode.getNodeName();
-                switch (attrName) {
-                    case "servlet-name" -> addServletName(attrNode, servletNames);
-                    case "servlet-class" -> addServletClass(attrNode, servletClasses);
-                    default -> throw new IOException("Invalid node: " + attrName);
+                if (attrName.equals(nameAttr)) {
+                    addName(attrNode, names, tagName);
+                    continue;
                 }
+
+                if (attrName.equals(classAttr)) {
+                    addClass(attrNode, classes);
+                    continue;
+                }
+
+                throw new IOException("Invalid node: " + attrName);
             }
         }
     }
 
-    private void addServletName(Node attrNode, Set<String> names) throws IOException {
-        String servletName = attrNode.getTextContent();
-        if (!names.add(servletName)) {
-            throw new IOException("Servlet with this name already exists: " + servletName);
+    private void addName(Node attrNode, Set<String> names, String objectType) throws IOException {
+        String name = attrNode.getTextContent();
+        if (!names.add(name)) {
+            throw new IOException(objectType + " with this name already exists: " + name);
         }
     }
 
-    private void addServletClass(Node attrNode, Set<Class<?>> classes) throws IOException {
-        String servletClassName = attrNode.getTextContent();
-        servletClassName = webAppDirFromRoot + "." + servletClassName;
+    private void addClass(Node attrNode, Set<Class<?>> classes) throws IOException {
+        String className = attrNode.getTextContent();
         try {
-            Class<?> servletClass = Class.forName(servletClassName);
-            if (!classes.add(servletClass)) {
-                throw new IOException("Class already exists: " + servletClass);
+            Class<?> clazz = servletContext.classLoader.loadClass(className);
+            if (!classes.add(clazz)) {
+                throw new IOException("Class already exists: " + clazz);
             }
         } catch (ClassNotFoundException e) {
-            throw new IOException("Class not found: " + servletClassName);
+            throw new IOException("Class not found: " + className);
         }
     }
 
@@ -138,6 +148,18 @@ public class WebXmlParser {
             String servletName = servletNames.get(i);
             String urlPattern = urlPatterns.get(i);
             servletContext.addServletMapping(servletName, urlPattern);
+        }
+    }
+
+    private void createFilterMappings(Document document) throws IOException {
+        List<Class<?>> filterClasses = new ArrayList<>();
+        List<String> servletNames = new ArrayList<>();
+        parseFilterMappings(document, filterClasses, servletNames);
+
+        for (int i = 0; i < filterClasses.size(); i++) {
+            Class<?> filterClass = filterClasses.get(i);
+            String servletName = servletNames.get(i);
+            servletContext.addFilterMapping(filterClass, servletName);
         }
     }
 
@@ -155,24 +177,55 @@ public class WebXmlParser {
 
                 String attrName = attrNode.getNodeName();
                 switch (attrName) {
-                    case "servlet-name" -> addServletNameInMapping(attrNode, servletNames);
-                    case "url-pattern" -> addUrlPattern(attrNode, urlPatterns);
+                    case "servlet-name" -> addServletNameInMapping(attrNode, servletNames, "Servlet");
+                    case "url-pattern" -> addMapping(attrNode, urlPatterns);
                     default -> throw new IOException("Invalid node: " + attrName);
                 }
             }
         }
     }
 
-    private void addUrlPattern(Node attrNode, List<String> urlPatterns) {
-        String urlPattern = attrNode.getTextContent();
-        urlPatterns.add(urlPattern);
+    private void parseFilterMappings(Document document, List<Class<?>> filterClasses, List<String> servletNames) throws IOException {
+        NodeList filterNodes = document.getElementsByTagName("filter-mapping");
+        for (int i = 0; i < filterNodes.getLength(); i++) {
+            Node filterNode = filterNodes.item(i);
+            NodeList filterAttr = filterNode.getChildNodes();
+            for (int j = 0; j < filterAttr.getLength(); j++) {
+                Node attrNode = filterAttr.item(j);
+
+                if (attrNode instanceof Text) {
+                    continue;
+                }
+
+                String attrName = attrNode.getNodeName();
+                switch (attrName) {
+                    case "filter-name" -> addFilterClassInMapping(attrNode, filterClasses, "Filter");
+                    case "servlet-name" -> addMapping(attrNode, servletNames);
+                    default -> throw new IOException("Invalid node: " + attrName);
+                }
+            }
+        }
     }
 
-    private void addServletNameInMapping(Node attrNode, List<String> servletNames) throws IOException {
+    private void addMapping(Node attrNode, List<String> mappings) {
+        String urlPattern = attrNode.getTextContent();
+        mappings.add(urlPattern);
+    }
+
+    private void addServletNameInMapping(Node attrNode, List<String> names, String tagName) throws IOException {
         String servletName = attrNode.getTextContent();
         if (!servletContext.getServlets().containsKey(servletName)) {
-            throw new IOException("Servlet with this name doesn't exists: " + servletName);
+            throw new IOException(tagName + " with this name doesn't exists: " + servletName);
         }
-        servletNames.add(servletName);
+        names.add(servletName);
+    }
+
+    private void addFilterClassInMapping(Node attrNode, List<Class<?>> classes, String tagName) throws IOException {
+        String filterName = attrNode.getTextContent();
+        Class<?> filterClass = servletContext.getFilters().get(filterName);
+        if (filterClass == null) {
+            throw new IOException(tagName + " with this name doesn't exists: " + filterName);
+        }
+        classes.add(filterClass);
     }
 }

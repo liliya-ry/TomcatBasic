@@ -12,7 +12,7 @@ public class HttpServletRequest {
     private final Map<String, String> headers = new HashMap<>();
     private final Map<String, String> parameters = new HashMap<>();
     private final Map<String, ServletContext> servletContexts;
-    private final RequestDispatcher dispatcher;
+    private RequestDispatcher dispatcher;
     private String protocol;
     private String method;
     private String body = null;
@@ -166,7 +166,7 @@ public class HttpServletRequest {
 
     public RequestDispatcher getRequestDispatcher(String s) {
         ServletContext context = servletContexts.get(contextPath);
-        return context.getRequestDispatcher(s);
+        return dispatcher = context.getRequestDispatcher(s);
     }
 
     public RequestDispatcher getRequestDispatcher() {

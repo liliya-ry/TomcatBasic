@@ -54,7 +54,6 @@ public class HtmlWriter {
             String path = p.toString().substring(webRootLen);
             path = contextPath + path.replace("\\", "/");
             String link = String.format("<a href=\"http://localhost:%d%s\">%s</a>", port, path, fileName);
-            System.out.println(link);
             String line = String.format("<p>%s  %s</p>%n", modifiedDate, link);
             out.write(line.getBytes());
         } catch (IOException e) {

@@ -9,7 +9,7 @@ public class HttpServletResponse {
     private static final String DEFAULT_PROTOCOL = "HTTP/1.0";
     public static final int SC_OK = 200,
                             SC_BAD_REQUEST = 400,
-                            SC_NOT_AUTHORISED = 401,
+                            SC_UNAUTHORIZED = 401,
                             SC_FORBIDDEN = 403,
                             SC_NOT_FOUND = 404,
                             SC_NOT_IMPLEMENTED = 501;
@@ -17,9 +17,9 @@ public class HttpServletResponse {
     private final String protocol;
     private final PrintWriter writer;
     private final Socket clientSocket;
-    private int status = SC_OK;
     private final ByteArrayOutputStream out = new ByteArrayOutputStream();
     private final Map<String, String> headers = new HashMap<>();
+    private int status = SC_OK;
 
 
     public HttpServletResponse(Socket clientSocket, String protocol) throws IOException {
@@ -47,12 +47,6 @@ public class HttpServletResponse {
         writer.flush();
     }
 
-    public void sendError(int status) throws IOException {
-        this.status = status;
-        printHeaders();
-        clientSocket.close();
-    }
-
     public void setStatus(int status) {
         this.status = status;
     }
@@ -73,8 +67,18 @@ public class HttpServletResponse {
         printStatus();
         setHeader("Content-Length", String.valueOf(out.size()));
         printHeaders();
-        writer.flush();
         out.writeTo(clientSocket.getOutputStream());
         clientSocket.close();
    }
+
+    public void sendError(int status) throws IOException {
+        this.status = status;
+        printStatus();
+        printHeaders();
+        clientSocket.close();
+    }
+
+    public int getStatus() {
+        return status;
+    }
 }

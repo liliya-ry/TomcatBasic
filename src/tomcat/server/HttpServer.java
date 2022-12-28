@@ -11,7 +11,7 @@ import java.util.*;
 import java.util.concurrent.*;
 
 public class HttpServer {
-    private static final String TOMCAT_ROOT = "D:/IdeaProjects/TomcatBasic";
+    //private static final String TOMCAT_ROOT = "D:/IdeaProjects/TomcatBasic";
     private static final String SERVER_XML_PATH = "src/tomcat/server.xml";
     private static final int DEFAULT_PORT = 80;
     private static final int DEFAULT_THREAD_POOL_SIZE = 1;
@@ -19,13 +19,9 @@ public class HttpServer {
     private final Map<String, ServletContext> servletContexts;
 
 
-    private HttpServer() {
+    private HttpServer() throws IOException, ParserConfigurationException, ClassNotFoundException, SAXException {
         servletContexts = new HashMap<>();
-        try {
-            parseServletContexts();
-        } catch (Exception e) {
-            System.out.println("Error parsing Servlet Contexts - server can not start");
-        }
+        parseServletContexts();
     }
 
     private void startServer(int port, int poolSize) {
@@ -42,7 +38,7 @@ public class HttpServer {
         }
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException, ParserConfigurationException, ClassNotFoundException, SAXException {
         if (args == null) {
             printUsage();
             return;
@@ -106,7 +102,7 @@ public class HttpServer {
         System.out.println("Hit CTRL-C to stop the server");
     }
 
-    public void parseServletContexts() throws IOException, SAXException, ParserConfigurationException {
+    public void parseServletContexts() throws IOException, SAXException, ParserConfigurationException, ClassNotFoundException {
         DocumentBuilder docBuilder = DocumentBuilderFactory.newDefaultInstance().newDocumentBuilder();
         Document document = docBuilder.parse(SERVER_XML_PATH);
         NodeList contextNodes = document.getElementsByTagName("Context");
@@ -115,10 +111,10 @@ public class HttpServer {
             Element contextEl = (Element) contextNode;
             String path = "/" + contextEl.getAttribute("path");
             String docBase = contextEl.getAttribute("docBase");
-            if (!docBase.startsWith(TOMCAT_ROOT)) {
-                continue;
-            }
-            docBase = docBase.substring(TOMCAT_ROOT.length() + 1);
+//            if (!docBase.startsWith(TOMCAT_ROOT)) {
+//                continue;
+//            }
+//            docBase = docBase.substring(TOMCAT_ROOT.length() + 1);
             ServletContext context = new ServletContext(docBase, path);
             servletContexts.put(path, context);
         }

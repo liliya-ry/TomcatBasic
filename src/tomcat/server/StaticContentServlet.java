@@ -8,13 +8,12 @@ import tomcat.utility.*;
 
 import java.io.*;
 import java.nio.file.*;
-import java.time.Instant;
-import java.util.Date;
 
 public class StaticContentServlet extends HttpServlet {
     private static final LoggingHandler LOGGING_HANDLER = new LoggingHandler(StaticContentServlet.class);
     private static final String INDEX_PATH = "index.html";
     private final ServletContext context;
+
     public StaticContentServlet(ServletContext context) {
         this.context = context;
     }
@@ -68,7 +67,7 @@ public class StaticContentServlet extends HttpServlet {
         try (var in = new FileInputStream(content);
              var bufferIn = new BufferedInputStream(in)) {
             byte[] buffer = new byte[4 * 1024];
-            for (int read; (read = bufferIn.read(buffer, 0, buffer.length)) != -1;) {
+            for (int read; (read = bufferIn.read(buffer, 0, buffer.length)) != -1; ) {
                 clientOutput.write(buffer, 0, read);
                 clientOutput.flush();
             }
