@@ -2,7 +2,7 @@ package tomcat.server;
 
 import tomcat.servlet.*;
 import tomcat.servlet.HttpServletResponse;
-import tomcat.servlet.request.HttpServletRequest;
+import tomcat.servlet.HttpServletRequest;
 import tomcat.servlet_context.ServletContext;
 import tomcat.utility.*;
 

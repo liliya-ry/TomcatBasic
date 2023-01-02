@@ -5,7 +5,7 @@ import org.xml.sax.SAXException;
 import tomcat.filter.Filter;
 import tomcat.server.StaticContentServlet;
 import tomcat.servlet.HttpServlet;
-import tomcat.servlet.request.RequestDispatcher;
+import tomcat.servlet.RequestDispatcher;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.*;

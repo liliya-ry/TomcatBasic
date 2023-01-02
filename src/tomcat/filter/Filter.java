@@ -1,7 +1,7 @@
 package tomcat.filter;
 
 import tomcat.servlet.HttpServletResponse;
-import tomcat.servlet.request.HttpServletRequest;
+import tomcat.servlet.HttpServletRequest;
 
 import java.io.IOException;
 

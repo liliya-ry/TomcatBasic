@@ -1,6 +1,5 @@
 package tomcat.server;
 
-import tomcat.servlet.request.*;
 import tomcat.servlet_context.ServletContext;
 import tomcat.servlet.*;
 import tomcat.utility.*;
@@ -27,7 +26,7 @@ public class HttpServerTask implements Runnable {
                 return;
             }
             LOGGING_HANDLER.logRequest(request);
-            HttpServletResponse response = new HttpServletResponse(clientSocket, request.getProtocol());
+            HttpServletResponse response = new HttpServletResponse(request);
             RequestDispatcher requestDispatcher = request.getRequestDispatcher();
             requestDispatcher.forward(request, response);
         } catch (Exception e) {
@@ -47,7 +46,7 @@ public class HttpServerTask implements Runnable {
     }
 
     private void sendBadRequestResponse() throws IOException {
-        HttpServletResponse response = new HttpServletResponse(clientSocket, null);
+        HttpServletResponse response = new HttpServletResponse(clientSocket);
         response.sendError(HttpServletResponse.SC_BAD_REQUEST);
         LOGGING_HANDLER.logError(null, StatusCode.BAD_REQUEST);
     }

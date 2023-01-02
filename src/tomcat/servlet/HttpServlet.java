@@ -1,7 +1,5 @@
 package tomcat.servlet;
 
-import tomcat.servlet.request.HttpServletRequest;
-
 import static tomcat.servlet.HttpServletResponse.SC_NOT_IMPLEMENTED;
 
 import java.io.IOException;

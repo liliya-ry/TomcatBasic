@@ -1,6 +1,9 @@
-package tomcat.servlet.request;
+package tomcat.servlet;
 
 import tomcat.servlet_context.ServletContext;
+import tomcat.session.Cookie;
+import tomcat.session.HttpSession;
+
 import java.io.*;
 import java.net.Socket;
 import java.util.*;
@@ -20,7 +23,9 @@ public class HttpServletRequest {
     private String contextPath;
     private String afterContextPath;
     private BufferedReader reader;
-
+    private HttpSession session = null;
+    private List<Cookie> cookies = new ArrayList<>();
+    Socket clientSocket;
 
     static {
         VALID_PROTOCOLS = Set.of("HTTP/0.9", "HTTP/1.0", "HTTP/1.1", "HTTP/2.0.");
@@ -28,10 +33,12 @@ public class HttpServletRequest {
     }
 
     public HttpServletRequest(Socket clientSocket, Map<String, ServletContext> servletContexts) throws IOException {
+        this.clientSocket = clientSocket;
         this.servletContexts = servletContexts;
         setReader(clientSocket);
         readFirstLine();
         readHeaders();
+        assignCookies();
         setHost();
         readBody();
         ServletContext context = servletContexts.get(contextPath);
@@ -85,6 +92,23 @@ public class HttpServletRequest {
             String headerName = parts[0];
             String headerValue = parts[1];
             headers.put(headerName, headerValue);
+        }
+    }
+
+    private void assignCookies() throws IOException {
+        String cookiesStr = headers.get("Cookie");
+        if (cookiesStr == null) {
+            return;
+        }
+
+        String[] cookieParts = cookiesStr.split(";");
+        for (int i = 0; i < cookieParts.length; i++) {
+            String[] attrParts = cookieParts[i].split("=");
+            if (attrParts.length != 2) {
+                throw new IOException("invalid cookie");
+            }
+            Cookie cookie = new Cookie(attrParts[0], attrParts[1]);
+            cookies.add(cookie);
         }
     }
 
@@ -171,5 +195,31 @@ public class HttpServletRequest {
 
     public RequestDispatcher getRequestDispatcher() {
         return dispatcher;
+    }
+
+    public HttpSession getSession() {
+        if (session == null) {
+            session = new HttpSession();
+        }
+
+        Cookie cookie = new Cookie("JSESSIONID", session.getSessionId());
+        cookie.setPath(contextPath);
+        cookie.setHttpOnly(true);
+
+        cookies.add(cookie);
+
+        return session;
+    }
+
+    public HttpSession getSession(boolean create) {
+        return create ? getSession() : null;
+    }
+
+    public Cookie[] getCookies() {
+        Cookie[] cookiesArr = new Cookie[cookies.size()];
+        for (int i = 0; i < cookiesArr.length; i++) {
+            cookiesArr[i] = cookies.get(i);
+         }
+        return cookiesArr;
     }
 }

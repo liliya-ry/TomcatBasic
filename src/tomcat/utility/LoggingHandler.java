@@ -1,7 +1,7 @@
 package tomcat.utility;
 
 import org.apache.logging.log4j.*;
-import tomcat.servlet.request.HttpServletRequest;
+import tomcat.servlet.HttpServletRequest;
 
 public class LoggingHandler {
     private final Logger logger;

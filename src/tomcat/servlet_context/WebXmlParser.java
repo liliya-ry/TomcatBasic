@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.util.*;
 
 public class WebXmlParser {
-    private static final String WEB_XML_URL = "WEB-INF/web.xml";
+    private static final String WEB_XML_URL = "/WEB-INF/web.xml";
     private static final List<String> VALID_TAGS = List.of("filter", "filter-mapping", "servlet", "servlet-mapping");
     private static final Set<String> ORDERED_VALID_TAGS;
 
@@ -26,15 +26,15 @@ public class WebXmlParser {
     }
 
     public void parseWebXML() throws IOException, ClassNotFoundException, ParserConfigurationException, SAXException {
-            DocumentBuilder docBuilder = DocumentBuilderFactory.newDefaultInstance().newDocumentBuilder();
-            String fullWebXmlPath = webRoot + "/" + WEB_XML_URL;
-            Document document = docBuilder.parse(fullWebXmlPath);
-            invalidateWebXML(document);
-            invalidateNodes(document);
-            createServlets(document);
-            createServletMappings(document);
-            createFilters(document);
-            createFilterMappings(document);
+        DocumentBuilder docBuilder = DocumentBuilderFactory.newDefaultInstance().newDocumentBuilder();
+        String fullWebXmlPath = webRoot + WEB_XML_URL;
+        Document document = docBuilder.parse(fullWebXmlPath);
+        invalidateWebXML(document);
+        invalidateNodes(document);
+        createServlets(document);
+        createServletMappings(document);
+        createFilters(document);
+        createFilterMappings(document);
     }
 
     private void invalidateWebXML(Document document) throws IOException {
