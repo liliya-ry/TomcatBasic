@@ -1,11 +1,10 @@
-package tomcat.servlet_context;
+package tomcat.servlet;
 
 import org.apache.ibatis.io.Resources;
 import org.xml.sax.SAXException;
 import tomcat.filter.Filter;
 import tomcat.server.StaticContentServlet;
-import tomcat.servlet.HttpServlet;
-import tomcat.servlet.RequestDispatcher;
+import tomcat.session.HttpSession;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.*;
@@ -13,7 +12,10 @@ import java.lang.reflect.Constructor;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -27,6 +29,7 @@ public class ServletContext {
     String contextPath;
     String webRoot;
     URLClassLoader classLoader;
+    HttpSession session = null;
 
     public ServletContext(String webAppDir, String contextPath) throws IOException, ParserConfigurationException, ClassNotFoundException, SAXException {
         this.webRoot = webAppDir;

@@ -1,6 +1,5 @@
 package tomcat.server;
 
-import tomcat.servlet_context.ServletContext;
 import tomcat.servlet.*;
 import tomcat.utility.*;
 import java.io.IOException;

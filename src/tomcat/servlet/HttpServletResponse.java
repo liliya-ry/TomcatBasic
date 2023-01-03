@@ -54,6 +54,7 @@ public class HttpServletResponse {
     private void printHeaders() {
         for (Map.Entry<String, String> headerEntry : headers.entrySet()) {
             writer.print(headerEntry.getKey() + ": " + headerEntry.getValue() + "\r\n");
+            System.out.println(headerEntry.getKey() + ": " + headerEntry.getValue());
         }
         writer.print("\r\n");
         writer.flush();
@@ -111,7 +112,7 @@ public class HttpServletResponse {
             cookieStr += "Secure;";
         }
 
-        headers.put("Set-Cookie", cookieStr);
+        headers.put("Set-Cookie", cookieStr.substring(0, cookieStr.length() - 1));
     }
 
     private void setCookies() {

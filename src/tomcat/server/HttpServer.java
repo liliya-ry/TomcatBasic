@@ -3,7 +3,8 @@ package tomcat.server;
 import org.apache.commons.cli.*;
 import org.w3c.dom.*;
 import org.xml.sax.SAXException;
-import tomcat.servlet_context.ServletContext;
+import tomcat.servlet.ServletContext;
+
 import javax.xml.parsers.*;
 import java.io.IOException;
 import java.net.*;
@@ -11,7 +12,6 @@ import java.util.*;
 import java.util.concurrent.*;
 
 public class HttpServer {
-    //private static final String TOMCAT_ROOT = "D:/IdeaProjects/TomcatBasic";
     private static final String SERVER_XML_PATH = "src/tomcat/server.xml";
     private static final int DEFAULT_PORT = 80;
     private static final int DEFAULT_THREAD_POOL_SIZE = 1;

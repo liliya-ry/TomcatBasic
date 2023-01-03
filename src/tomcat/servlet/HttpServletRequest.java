@@ -1,6 +1,5 @@
 package tomcat.servlet;
 
-import tomcat.servlet_context.ServletContext;
 import tomcat.session.Cookie;
 import tomcat.session.HttpSession;
 
@@ -23,7 +22,6 @@ public class HttpServletRequest {
     private String contextPath;
     private String afterContextPath;
     private BufferedReader reader;
-    private HttpSession session = null;
     private List<Cookie> cookies = new ArrayList<>();
     Socket clientSocket;
 
@@ -198,20 +196,24 @@ public class HttpServletRequest {
     }
 
     public HttpSession getSession() {
-        if (session == null) {
-            session = new HttpSession();
+        ServletContext context = servletContexts.get(contextPath);
+        if (context.session == null) {
+            context.session = new HttpSession();
         }
 
-        Cookie cookie = new Cookie("JSESSIONID", session.getSessionId());
+        Cookie cookie = new Cookie("JSESSIONID", context.session.getSessionId());
         cookie.setPath(contextPath);
         cookie.setHttpOnly(true);
 
         cookies.add(cookie);
 
-        return session;
+        return context.session;
     }
 
     public HttpSession getSession(boolean create) {
+        ServletContext context = servletContexts.get(contextPath);
+        if (context.session != null)
+            return context.session;
         return create ? getSession() : null;
     }
 
