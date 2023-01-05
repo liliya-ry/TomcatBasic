@@ -1,7 +1,5 @@
 package tomcat.servlet;
 
-import tomcat.session.Cookie;
-
 import java.io.*;
 import java.net.Socket;
 import java.util.HashMap;
@@ -31,7 +29,6 @@ public class HttpServletResponse {
         OutputStream clientOS = clientSocket.getOutputStream();
         this.writer = new PrintWriter(clientOS);
         this.protocol = request.getProtocol();
-        setCookies();
     }
 
     public HttpServletResponse(Socket clientSocket) throws IOException {
@@ -43,6 +40,7 @@ public class HttpServletResponse {
 
     public PrintWriter getWriter() {
         printStatus();
+        setCookies();
         printHeaders();
         return writer;
     }
@@ -54,7 +52,6 @@ public class HttpServletResponse {
     private void printHeaders() {
         for (Map.Entry<String, String> headerEntry : headers.entrySet()) {
             writer.print(headerEntry.getKey() + ": " + headerEntry.getValue() + "\r\n");
-            System.out.println(headerEntry.getKey() + ": " + headerEntry.getValue());
         }
         writer.print("\r\n");
         writer.flush();
@@ -69,6 +66,7 @@ public class HttpServletResponse {
     }
 
    public OutputStream getOutputStream() {
+        setCookies();
         return out;
    }
 
@@ -79,6 +77,7 @@ public class HttpServletResponse {
    public void sendResponse() throws IOException {
         printStatus();
         setHeader("Content-Length", String.valueOf(out.size()));
+        setCookies();
         printHeaders();
         out.writeTo(request.clientSocket.getOutputStream());
         clientSocket.close();
@@ -87,6 +86,7 @@ public class HttpServletResponse {
     public void sendError(int status) throws IOException {
         this.status = status;
         printStatus();
+        setCookies();
         printHeaders();
         clientSocket.close();
     }
@@ -95,34 +95,12 @@ public class HttpServletResponse {
         return status;
     }
 
-    public void addCookie(Cookie cookie) {
-        String cookieStr = cookie.getName() + "=" + cookie.getValue() + ";";
-        String path = cookie.getPath();
-        if (path != null) {
-            cookieStr += "path=" + path + ";";
-        }
-
-        boolean httpOnly = cookie.isHttpOnly();
-        if (httpOnly) {
-            cookieStr += "HttpOnly;";
-        }
-
-        boolean secure = cookie.isSecure();
-        if (secure) {
-            cookieStr += "Secure;";
-        }
-
-        headers.put("Set-Cookie", cookieStr.substring(0, cookieStr.length() - 1));
-    }
-
     private void setCookies() {
-        Cookie[] cookies = request.getCookies();
-        if (cookies.length == 0) {
+        String cookiesStr = request.getHeader("Cookie");
+        if (cookiesStr == null) {
             return;
         }
 
-        for (Cookie cookie : cookies) {
-            addCookie(cookie);
-        }
+        headers.put("Set-Cookie", cookiesStr);
     }
 }

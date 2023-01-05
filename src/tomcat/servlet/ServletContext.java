@@ -4,7 +4,6 @@ import org.apache.ibatis.io.Resources;
 import org.xml.sax.SAXException;
 import tomcat.filter.Filter;
 import tomcat.server.StaticContentServlet;
-import tomcat.session.HttpSession;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.*;
@@ -29,7 +28,7 @@ public class ServletContext {
     String contextPath;
     String webRoot;
     URLClassLoader classLoader;
-    HttpSession session = null;
+    Map<String, HttpSession> sessions = new HashMap<>();
 
     public ServletContext(String webAppDir, String contextPath) throws IOException, ParserConfigurationException, ClassNotFoundException, SAXException {
         this.webRoot = webAppDir;

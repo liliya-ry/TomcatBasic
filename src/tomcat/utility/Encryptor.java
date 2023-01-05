@@ -27,6 +27,6 @@ public class Encryptor {
     }
 
     public static int generateRandom() {
-        return RANDOM.nextInt();
+        return RANDOM.nextInt(1, Integer.MAX_VALUE);
     }
 }

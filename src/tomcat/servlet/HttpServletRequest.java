@@ -1,8 +1,5 @@
 package tomcat.servlet;
 
-import tomcat.session.Cookie;
-import tomcat.session.HttpSession;
-
 import java.io.*;
 import java.net.Socket;
 import java.util.*;
@@ -13,7 +10,7 @@ public class HttpServletRequest {
 
     private final Map<String, String> headers = new HashMap<>();
     private final Map<String, String> parameters = new HashMap<>();
-    private final Map<String, ServletContext> servletContexts;
+    private ServletContext servletContext;
     private RequestDispatcher dispatcher;
     private String protocol;
     private String method;
@@ -22,7 +19,8 @@ public class HttpServletRequest {
     private String contextPath;
     private String afterContextPath;
     private BufferedReader reader;
-    private List<Cookie> cookies = new ArrayList<>();
+    private final List<Cookie> cookies = new ArrayList<>();
+    HttpSession session;
     Socket clientSocket;
 
     static {
@@ -32,9 +30,8 @@ public class HttpServletRequest {
 
     public HttpServletRequest(Socket clientSocket, Map<String, ServletContext> servletContexts) throws IOException {
         this.clientSocket = clientSocket;
-        this.servletContexts = servletContexts;
         setReader(clientSocket);
-        readFirstLine();
+        readFirstLine(servletContexts);
         readHeaders();
         assignCookies();
         setHost();
@@ -49,7 +46,7 @@ public class HttpServletRequest {
         reader = new BufferedReader(in);
     }
 
-    private void readFirstLine() throws IOException {
+    private void readFirstLine(Map<String, ServletContext> servletContexts) throws IOException {
         String firstLine = reader.readLine();
         String[] firstLineParts = firstLine.split(" ");
         if (firstLineParts.length != 3) {
@@ -59,7 +56,7 @@ public class HttpServletRequest {
         method = firstLineParts[0];
         invalidateStr(VALID_METHODS, method, "Invalid method: ");
         String path = firstLineParts[1];
-        readParameters(path);
+        readParameters(path, servletContexts);
 
         protocol = firstLineParts[2];
         invalidateStr(VALID_PROTOCOLS, protocol, "Invalid protocol: ");
@@ -93,19 +90,18 @@ public class HttpServletRequest {
         }
     }
 
-    private void assignCookies() throws IOException {
+    private void assignCookies() {
         String cookiesStr = headers.get("Cookie");
         if (cookiesStr == null) {
             return;
         }
 
         String[] cookieParts = cookiesStr.split(";");
-        for (int i = 0; i < cookieParts.length; i++) {
-            String[] attrParts = cookieParts[i].split("=");
-            if (attrParts.length != 2) {
-                throw new IOException("invalid cookie");
-            }
-            Cookie cookie = new Cookie(attrParts[0], attrParts[1]);
+        for (String cookiePart : cookieParts) {
+            String[] attrParts = cookiePart.split("=");
+            String cookieName = attrParts[0];
+            String cookieValue = attrParts[1];
+            Cookie cookie = new Cookie(cookieName, cookieValue);
             cookies.add(cookie);
         }
     }
@@ -117,10 +113,10 @@ public class HttpServletRequest {
         }
     }
 
-    private void readParameters(String path) throws IOException {
+    private void readParameters(String path, Map<String, ServletContext> servletContexts) throws IOException {
         String[] pathParts = path.split("\\?");
         requestURL = pathParts[0];
-        contextPath = findContextPath();
+        contextPath = findContextPath(servletContexts);
         if (contextPath == null) {
             throw new IOException("No context for url : " + requestURL);
         }
@@ -140,9 +136,11 @@ public class HttpServletRequest {
         }
     }
 
-    private String findContextPath() {
-        for (String path : servletContexts.keySet()) {
+    private String findContextPath(Map<String, ServletContext> servletContexts) {
+        for (Map.Entry<String, ServletContext> servletContextEntry : servletContexts.entrySet()) {
+            String path = servletContextEntry.getKey();
             if (requestURL.startsWith(path)) {
+                this.servletContext = servletContextEntry.getValue();
                 return path;
             }
         }
@@ -187,8 +185,7 @@ public class HttpServletRequest {
     }
 
     public RequestDispatcher getRequestDispatcher(String s) {
-        ServletContext context = servletContexts.get(contextPath);
-        return dispatcher = context.getRequestDispatcher(s);
+        return dispatcher = servletContext.getRequestDispatcher(s);
     }
 
     public RequestDispatcher getRequestDispatcher() {
@@ -196,25 +193,28 @@ public class HttpServletRequest {
     }
 
     public HttpSession getSession() {
-        ServletContext context = servletContexts.get(contextPath);
-        if (context.session == null) {
-            context.session = new HttpSession();
+        if (session != null) {
+            return session;
         }
 
-        Cookie cookie = new Cookie("JSESSIONID", context.session.getSessionId());
+        session = new HttpSession(servletContext);
+        session.isNew = true;
+        createCookie();
+        return session;
+    }
+
+    private void createCookie() {
+        Cookie cookie = new Cookie(Cookie.SESSION_NAME, session.getId());
         cookie.setPath(contextPath);
         cookie.setHttpOnly(true);
-
         cookies.add(cookie);
-
-        return context.session;
+        String cookieStr = headers.get("Cookie");
+        cookieStr = cookieStr == null ? cookie.toString() : cookieStr + ";" + cookie;
+        headers.put("Cookie", cookieStr);
     }
 
     public HttpSession getSession(boolean create) {
-        ServletContext context = servletContexts.get(contextPath);
-        if (context.session != null)
-            return context.session;
-        return create ? getSession() : null;
+        return create ? getSession() : session;
     }
 
     public Cookie[] getCookies() {
